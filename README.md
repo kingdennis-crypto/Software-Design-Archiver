@@ -9,6 +9,6 @@ The fat Jar must be runnable using a simple `java -jar <fat jar>` command.
 
 - Dennis Moes - d.moes@student.vu.nl - 2839746
 - Simon Vriesema - s.r.vriesema@student.vu.nl - 2839785
-- Joli Coeur - j.r.f.weibolt@student.vu.nl - 2837627
+- Joli-Coeur Weibolt - j.r.f.weibolt@student.vu.nl - 2837627
 - Jaïr Telting - j.s.student@vu.nl - 2691376
 
