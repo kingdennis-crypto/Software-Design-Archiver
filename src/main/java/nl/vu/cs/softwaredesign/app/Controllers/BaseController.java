@@ -47,11 +47,11 @@ public abstract class BaseController {
 
     /**
      * Opens a new window with the specified FXML file.
-     * @param fxmlPath The path to the FXML file for the new window.
+     * @param fxmlFileName The filename of the FXML file for the new window.
      */
-    protected void openNewWindow(String fxmlPath) {
+    protected void openNewWindow(String fxmlFileName) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/" + fxmlPath));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/nl/vu/cs/softwaredesign/" + fxmlFileName));
             Parent root = loader.load();
 
             Stage newStage = new Stage();
