@@ -11,13 +11,24 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Abstract base class for JavaFX controllers providing common functionalities.
+ */
 public abstract class BaseController {
     protected Stage stage;
 
+    /**
+     * Sets the main stage for the controller.
+     * @param stage The main stage to set.
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Switches to a new scene specified by the FXML file.
+     * @param fxmlPath The path to the FXML file for the new scene.
+     */
     protected void switchScene(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -34,6 +45,10 @@ public abstract class BaseController {
         }
     }
 
+    /**
+     * Opens a new window with the specified FXML file.
+     * @param fxmlPath The path to the FXML file for the new window.
+     */
     protected void openNewWindow(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/" + fxmlPath));
@@ -53,10 +68,18 @@ public abstract class BaseController {
         }
     }
 
+    /**
+     * Closes the current window
+     */
     protected void closeCurrentWindow() {
         stage.close();
     }
 
+    /**
+     * Shows an informational alert dialog.
+     * @param title     The title of the alert.
+     * @param message   The message to display in the alert.
+     */
     protected void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -65,6 +88,13 @@ public abstract class BaseController {
         alert.showAndWait();
     }
 
+    /**
+     * Shows a confirmation dialog with title and message and actions for "Yes" and "No".
+     * @param title     The title of the confirmation dialog.
+     * @param message   The message to display in the confirmation dialog.
+     * @param yesAction The action to perform when the user clicks "Yes"
+     * @param noAction  The action to perform when the user clicks "No"
+     */
     protected void showConfirmationDialog(String title, String message, Runnable yesAction, Runnable noAction) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);
