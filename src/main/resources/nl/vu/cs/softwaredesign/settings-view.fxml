@@ -40,9 +40,9 @@
       </GridPane>
       <ButtonBar layoutX="42.0" layoutY="316.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <buttons>
-          <Button mnemonicParsing="false" onMouseClicked="#saveProperties" text="Save" />
+          <Button defaultButton="true" mnemonicParsing="false" onMouseClicked="#saveProperties" text="Save" />
             <Button mnemonicParsing="false" onMouseClicked="#resetProperties" text="Reset" />
-            <Button mnemonicParsing="false" text="Cancel" />
+            <Button cancelButton="true" mnemonicParsing="false" onMouseClicked="#cancelSettingsView" text="Cancel" />
         </buttons>
       </ButtonBar>
    </children>
