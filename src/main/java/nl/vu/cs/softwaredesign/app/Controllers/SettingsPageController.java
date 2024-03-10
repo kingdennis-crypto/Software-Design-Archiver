@@ -3,15 +3,17 @@ package nl.vu.cs.softwaredesign.app.Controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
 import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
+import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
 
 import java.io.File;
+import java.util.stream.Collectors;
 
 public class SettingsPageController extends BaseController {
     ConfigurationHandler configurationHandler;
@@ -28,6 +30,9 @@ public class SettingsPageController extends BaseController {
     @FXML
     private Text outputDirTxt;
 
+    /**
+     * Sets upt the configuration handler and populates all fields with settings if they exists
+     */
     @FXML
     public void initialize() {
         this.configurationHandler = ConfigurationHandler.getInstance();
@@ -38,15 +43,25 @@ public class SettingsPageController extends BaseController {
         setSettingsValues();
     }
 
+    /**
+     * Retrieves a list of compression formats for the combo box.
+     * @return List of compression formats.
+     */
     private ObservableList<String> getCompressionFormats() {
         ObservableList<String> items = FXCollections.observableArrayList();
 
-        items.add("ZIP");
-        items.add("RAR");
+        items.addAll(CompressionHandler.getAvailableCompressions()
+                .stream()
+                .map(CompressionType::label)
+                .collect(Collectors.toList()));
 
         return items;
     }
 
+    /**
+     * Retrieves a list of compression levels for the combo box.
+     * @return List of compression levels.
+     */
     private ObservableList<String> getCompressionLevels() {
         ObservableList<String> items = FXCollections.observableArrayList();
 
@@ -57,7 +72,12 @@ public class SettingsPageController extends BaseController {
         return items;
     }
 
+    /**
+     * Sets the values of UI components based on saved configuration settings.
+     */
     private void setSettingsValues() {
+        CompressionHandler.getAvailableCompressions();
+
         String format = configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT);
         String level = configurationHandler.getProperty(SettingsValue.COMPRESSION_LEVEL);
         String exclude = configurationHandler.getProperty(SettingsValue.EXCLUDE_FILES);
@@ -69,6 +89,9 @@ public class SettingsPageController extends BaseController {
         this.outputDirTxt.setText(output);
     }
 
+    /**
+     * Saves the current settings to the configuration file.
+     */
     public void saveProperties() {
         configurationHandler.setProperty(SettingsValue.COMPRESSION_FORMAT, compressionFormatCombo.getValue());
         configurationHandler.setProperty(SettingsValue.COMPRESSION_LEVEL, compressionLevelCombo.getValue());
@@ -80,11 +103,17 @@ public class SettingsPageController extends BaseController {
         showAlert("Saved properties", "Successfully saved the properties");
     }
 
+    /**
+     * Resets the settings to the last saved state.
+     */
     public void resetProperties() {
         configurationHandler.resetSavedProperties();
         setSettingsValues();
     }
 
+    /**
+     * Opens a directory chooser to allow the user to select an output directory for the archive.
+     */
     public void selectOutputDir() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select folder");
@@ -94,5 +123,13 @@ public class SettingsPageController extends BaseController {
         if (outputFolder != null) {
             outputDirTxt.setText(outputFolder.getAbsolutePath());
         }
+    }
+
+    /**
+     * Closes and resets the settings to the last saved state
+     */
+    public void cancelSettingsView() {
+        resetProperties();
+        closeCurrentWindow();
     }
 }
