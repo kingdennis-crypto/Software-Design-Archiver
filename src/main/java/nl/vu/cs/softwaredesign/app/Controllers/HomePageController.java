@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.DirectoryChooser;
+import nl.vu.cs.softwaredesign.app.Utils.Icons;
 
 import java.io.File;
 import java.util.Objects;
@@ -44,9 +45,10 @@ public class HomePageController extends BaseController {
         for (File file : Objects.requireNonNull(rootFile.listFiles())) {
             if (file.isFile()) {
                 TreeItem<String> fileItem = new TreeItem<>(file.getName());
+                fileItem.setGraphic(Icons.createJavaFXIcon("file.png"));
                 treeItem.getChildren().add(fileItem);
             } else {
-                TreeItem<String> nestedItem = new TreeItem<>(file.getName());
+                TreeItem<String> nestedItem = new TreeItem<>(file.getName(), Icons.createJavaFXIcon("folder.png"));
                 makeTreeItem(nestedItem, file);
                 treeItem.getChildren().add(nestedItem);
             }
@@ -61,7 +63,7 @@ public class HomePageController extends BaseController {
         selectedFolder = directoryChooser.showDialog(stage);
 
         if (selectedFolder != null) {
-            TreeItem<String> folderItem = new TreeItem<>(selectedFolder.getName());
+            TreeItem<String> folderItem = new TreeItem<>(selectedFolder.getName(), Icons.createJavaFXIcon("folder.png"));
             makeTreeItem(folderItem, selectedFolder);
             treeViewTable.setRoot(folderItem);
         }
