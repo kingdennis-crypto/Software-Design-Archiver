@@ -72,7 +72,7 @@ public class ConfigurationHandler {
      * Saves the current configuration properties to the configuration file.
      */
     public void saveProperties() {
-        try (BufferedWriter writer = Files.newBufferedWriter(Path.of(""))) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Path.of(PathHandler.getUserDataPath() + "/config.properties"))) {
             properties.store(writer, "Updated properties");
         } catch (IOException ex) {
             System.err.println("Error saving properties file: " + ex.getMessage());
