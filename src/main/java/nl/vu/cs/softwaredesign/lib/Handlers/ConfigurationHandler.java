@@ -55,8 +55,8 @@ public class ConfigurationHandler {
      * @param key The key for which to retrieve the value.
      * @return The value associated with the key, or null if the key is not found.
      */
-    public String getProperty(String key) {
-        return properties.getProperty(key);
+    public String getProperty(SettingsValue key) {
+        return properties.getProperty(key.label);
     }
 
     /**
