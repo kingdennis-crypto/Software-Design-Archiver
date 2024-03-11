@@ -17,7 +17,7 @@ public class TestPageController extends BaseController {
         Runnable yes = () -> System.out.println("Yes");
         Runnable no = () -> System.out.println("No");
 
-        showConfirmationDialog("Home dialog", "This is a simple yes no field", yes, no);
+        showConfirmationDialog("Test dialog", "This is a simple yes no field", "Yes", "No", yes, no);
     }
 
     public void openSettingsPage() {

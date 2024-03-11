@@ -3,6 +3,7 @@ package nl.vu.cs.softwaredesign.app.Controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -13,6 +14,7 @@ import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 public class SettingsPageController extends BaseController {
@@ -98,17 +100,25 @@ public class SettingsPageController extends BaseController {
         configurationHandler.setProperty(SettingsValue.EXCLUDE_FILES, excludeFilesInput.getText());
         configurationHandler.setProperty(SettingsValue.DEFAULT_OUTPUT, outputDirTxt.getText());
 
-        configurationHandler.saveProperties();
+        try {
+            configurationHandler.saveProperties();
+            showAlert("Saved properties", "Successfully saved the properties");
+        } catch (IOException ex) {
+            showAlert(Alert.AlertType.ERROR, "Saving properties", "Something went wrong trying to save the properties");
+        }
 
-        showAlert("Saved properties", "Successfully saved the properties");
     }
 
     /**
      * Resets the settings to the last saved state.
      */
     public void resetProperties() {
-        configurationHandler.resetSavedProperties();
-        setSettingsValues();
+        try {
+            configurationHandler.resetSavedProperties();
+            setSettingsValues();
+        } catch (IOException ex) {
+            showAlert(Alert.AlertType.ERROR, "Resetted properties", "Something went wrong trying to reset the properties");
+        }
     }
 
     /**
