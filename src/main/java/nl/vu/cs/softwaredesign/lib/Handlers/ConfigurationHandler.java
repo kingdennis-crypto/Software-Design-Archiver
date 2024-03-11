@@ -71,22 +71,24 @@ public class ConfigurationHandler {
     /**
      * Saves the current configuration properties to the configuration file.
      */
-    public void saveProperties() {
+    public void saveProperties() throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(PathHandler.getUserDataPath() + "/config.properties"))) {
             properties.store(writer, "Updated properties");
         } catch (IOException ex) {
             System.err.println("Error saving properties file: " + ex.getMessage());
+            throw ex;
         }
     }
 
     /**
      * Resets the current properties to the values stored in the configuration file.
      */
-    public void resetSavedProperties() {
+    public void resetSavedProperties() throws IOException {
         try {
             this.properties.load(new FileInputStream(PathHandler.getUserDataPath() + "/config.properties"));
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println("Error resetting properties file: " + ex.getMessage());
+            throw ex;
         }
     }
 }

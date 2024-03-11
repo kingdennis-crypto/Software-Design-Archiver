@@ -76,12 +76,13 @@ public abstract class BaseController {
     }
 
     /**
-     * Shows an informational alert dialog.
+     * Displays an alert dialog with the specified {@link javafx.scene.control.Alert.AlertType}, title and message.
+     * @param alertType The type of the alert (i.e., INFORMATION, WARNING, ERROR)
      * @param title     The title of the alert.
-     * @param message   The message to display in the alert.
+     * @param message   The message to be displayed in the alert.
      */
-    protected void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    protected void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
@@ -89,23 +90,47 @@ public abstract class BaseController {
     }
 
     /**
-     * Shows a confirmation dialog with title and message and actions for "Yes" and "No".
+     * Shows an informational alert dialog with the specified title and message.
+     * @param title     The title of the alert.
+     * @param message   The message to display in the alert.
+     */
+    protected void showAlert(String title, String message) {
+        this.showAlert(Alert.AlertType.INFORMATION, title, message);
+    }
+
+    /**
+     * Displays an information confirmation dialog.
      * @param title     The title of the confirmation dialog.
      * @param message   The message to display in the confirmation dialog.
-     * @param yesAction The action to perform when the user clicks "Yes"
-     * @param noAction  The action to perform when the user clicks "No"
+     * @param yesLabel  The label for the "Yes" button.
+     * @param noLabel   The label for the "No" button.
+     * @param yesAction The action for when the user clicks "Yes".
+     * @param noAction  The action for when the user clicks "No".
      */
-    protected void showConfirmationDialog(String title, String message, Runnable yesAction, Runnable noAction) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    protected void showConfirmationDialog(String title, String message, String yesLabel, String noLabel, Runnable yesAction, Runnable noAction) {
+        this.showConfirmationDialog(Alert.AlertType.CONFIRMATION, title, message, yesLabel, noLabel, yesAction, noAction);
+    }
+
+    /**
+     * Displays a confirmation with the specified AlertType
+     * @param alertType The type of the confirmation dialog (i.e. INFORMATION, WARNING, ERROR).
+     * @param title     The title of the confirmation dialog.
+     * @param message   The message to display in the confirmation dialog.
+     * @param yesLabel  The label for the "Yes" button.
+     * @param noLabel   The label for the "No" button.
+     * @param yesAction The action for when the user clicks "Yes".
+     * @param noAction  The action for when the user clicks "No".
+     */
+    protected void showConfirmationDialog(Alert.AlertType alertType, String title, String message, String yesLabel, String noLabel, Runnable yesAction, Runnable noAction) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
 
-        ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType yesButton = new ButtonType(yesLabel, ButtonBar.ButtonData.YES);
+        ButtonType noButton = new ButtonType(noLabel, ButtonBar.ButtonData.NO);
 
-        alert.getButtonTypes().setAll(yesButton, noButton, cancelButton);
+        alert.getButtonTypes().setAll(yesButton, noButton);
 
         alert.showAndWait().ifPresent(response -> {
             if (response == yesButton) {

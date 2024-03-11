@@ -5,6 +5,7 @@ import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CompressionHandler {
     /**
@@ -19,9 +20,7 @@ public class CompressionHandler {
         File directory = new File(path);
 
         if (directory.exists() && directory.isDirectory()) {
-            File[] files = directory.listFiles();
-
-            for (File file : files) {
+            for (File file : Objects.requireNonNull(directory.listFiles())) {
                 // Check if the file is a Java class file
                 if (file.isFile() && file.getName().endsWith(".java")) {
                     String className = file.getName().replace(".java", "");
@@ -33,7 +32,6 @@ public class CompressionHandler {
                         // Check if the class has a CompressionType annotation
                         if (classObj.isAnnotationPresent(CompressionType.class)) {
                             CompressionType compressionType = classObj.getAnnotation(CompressionType.class);
-                            String typeName = compressionType.label();
                             classNames.add(compressionType);
                         }
                     } catch (ClassNotFoundException ex) {
