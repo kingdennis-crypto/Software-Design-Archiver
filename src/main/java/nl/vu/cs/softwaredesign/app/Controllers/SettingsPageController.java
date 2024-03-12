@@ -9,12 +9,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
+import nl.vu.cs.softwaredesign.lib.Enumerations.CompressionLevel;
 import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class SettingsPageController extends BaseController {
@@ -50,14 +52,10 @@ public class SettingsPageController extends BaseController {
      * @return List of compression formats.
      */
     private ObservableList<String> getCompressionFormats() {
-        ObservableList<String> items = FXCollections.observableArrayList();
-
-        items.addAll(CompressionHandler.getAvailableCompressions()
+        return FXCollections.observableArrayList(CompressionHandler.getAvailableCompressions()
                 .stream()
                 .map(CompressionType::label)
                 .collect(Collectors.toList()));
-
-        return items;
     }
 
     /**
@@ -65,13 +63,9 @@ public class SettingsPageController extends BaseController {
      * @return List of compression levels.
      */
     private ObservableList<String> getCompressionLevels() {
-        ObservableList<String> items = FXCollections.observableArrayList();
-
-        items.add("Low");
-        items.add("Medium");
-        items.add("High");
-
-        return items;
+        return FXCollections.observableArrayList(Arrays.stream(CompressionLevel.values())
+                .map(level -> level.label)
+                .collect(Collectors.toList()));
     }
 
     /**
