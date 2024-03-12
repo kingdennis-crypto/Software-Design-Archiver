@@ -5,6 +5,10 @@ When submitting your project, remember to make a [GitHub release](https://docs.g
 
 The fat Jar must be runnable using a simple `java -jar <fat jar>` command.
 
+## Temporary run command
+
+Gradle > application > run
+
 ## Collaborators
 
 - Dennis Moes - d.moes@student.vu.nl - 2839746
