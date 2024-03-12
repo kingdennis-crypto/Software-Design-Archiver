@@ -5,10 +5,10 @@ import javafx.scene.image.ImageView;
 
 import java.util.Objects;
 
-public class Icons {
+public class IconUtils {
     public static ImageView createJavaFXIcon(String iconName) {
         Image iconImage = new Image(
-                Objects.requireNonNull(Icons.class.getResourceAsStream("/nl/vu/cs/softwaredesign/icons/" + iconName)));
+                Objects.requireNonNull(IconUtils.class.getResourceAsStream("/nl/vu/cs/softwaredesign/icons/" + iconName)));
 
         ImageView iconImageView = new ImageView(iconImage);
         iconImageView.setFitWidth(16);

@@ -4,14 +4,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.DirectoryChooser;
-import nl.vu.cs.softwaredesign.app.Utils.Icons;
+import nl.vu.cs.softwaredesign.app.Utils.IconUtils;
+import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
 
 import java.io.File;
 import java.util.Objects;
 
 public class HomePageController extends BaseController {
+
     @FXML
-    private TreeView treeViewTable;
+    private TreeView<String> treeViewTable;
 
     private File selectedFolder;
 
@@ -32,6 +34,10 @@ public class HomePageController extends BaseController {
         openNewWindow("test-view.fxml");
     }
 
+    public void openMetadataPage() {
+        openNewWindow("metadata-view.fxml");
+    }
+
     public void clearSelectedFolder() {
         this.selectedFolder = null;
         TreeItem<String> rootItem = new TreeItem<>("No folder chosen");
@@ -45,10 +51,10 @@ public class HomePageController extends BaseController {
         for (File file : Objects.requireNonNull(rootFile.listFiles())) {
             if (file.isFile()) {
                 TreeItem<String> fileItem = new TreeItem<>(file.getName());
-                fileItem.setGraphic(Icons.createJavaFXIcon("file.png"));
+                fileItem.setGraphic(IconUtils.createJavaFXIcon("file.png"));
                 treeItem.getChildren().add(fileItem);
             } else {
-                TreeItem<String> nestedItem = new TreeItem<>(file.getName(), Icons.createJavaFXIcon("folder.png"));
+                TreeItem<String> nestedItem = new TreeItem<>(file.getName(), IconUtils.createJavaFXIcon("folder.png"));
                 makeTreeItem(nestedItem, file);
                 treeItem.getChildren().add(nestedItem);
             }
@@ -63,7 +69,7 @@ public class HomePageController extends BaseController {
         selectedFolder = directoryChooser.showDialog(stage);
 
         if (selectedFolder != null) {
-            TreeItem<String> folderItem = new TreeItem<>(selectedFolder.getName(), Icons.createJavaFXIcon("folder.png"));
+            TreeItem<String> folderItem = new TreeItem<>(selectedFolder.getName(), IconUtils.createJavaFXIcon("folder.png"));
             makeTreeItem(folderItem, selectedFolder);
             treeViewTable.setRoot(folderItem);
         }
@@ -78,6 +84,7 @@ public class HomePageController extends BaseController {
     }
 
     public void archiveSelection() {
+        FileArchive archive = new FileArchive(selectedFolder);
         System.out.println("Archiving the selection");
     }
 }
