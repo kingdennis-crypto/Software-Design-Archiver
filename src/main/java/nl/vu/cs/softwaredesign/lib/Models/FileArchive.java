@@ -63,6 +63,10 @@ public class FileArchive {
                 .sum();
     }
 
+    public File getROOT() {
+        return ROOT;
+    }
+
     /**
      * Gets the total size of all files in the file archive in kilobytes.
      * @return The total size of all files in kilobytes.

@@ -1,12 +1,9 @@
 package nl.vu.cs.softwaredesign.lib.Interfaces;
 
-import net.lingala.zip4j.ZipFile;
-
-import java.io.File;
+import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
 import java.io.IOException;
-import java.util.List;
 
 public interface ICompressionFormat {
-    ZipFile compress(List<File> files, String destinationPath, String password) throws IOException;
-    List<File> decompress(List<ZipFile> zipFiles, String destinationPath, String password) throws IOException;
+    FileArchive compress(FileArchive files, String destinationPath, String password) throws IOException;
+    FileArchive decompress(FileArchive compressedFiles, String destinationPath, String password) throws IOException;
 }
