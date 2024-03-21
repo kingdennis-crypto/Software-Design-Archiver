@@ -1,6 +1,7 @@
 package nl.vu.cs.softwaredesign.lib.interfaces;
 
 import nl.vu.cs.softwaredesign.lib.enumerations.Status;
+import java.io.File;
 
 /**
  * Interface for the progress listener
@@ -8,4 +9,5 @@ import nl.vu.cs.softwaredesign.lib.enumerations.Status;
  */
 public interface IProgressListener {
     void update(Status status);
+    void update(Status status, File file);
 }
