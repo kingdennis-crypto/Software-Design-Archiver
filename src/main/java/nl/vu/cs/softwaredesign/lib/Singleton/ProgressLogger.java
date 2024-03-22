@@ -28,7 +28,7 @@ public class ProgressLogger implements IProgressListener {
      * If instance is null, creates a new instance and also creates the logfile
      * @return The singleton instance of ProgressLogger.
      */
-    public ProgressLogger getInstance() {
+    public static ProgressLogger getInstance() {
         if (instance == null) instance = new ProgressLogger();
         return instance;
     }
