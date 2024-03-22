@@ -4,11 +4,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.Utils.IconUtils;
+import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
+import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
+import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
+import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
+import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
 import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HomePageController extends BaseController {
 
@@ -16,10 +24,12 @@ public class HomePageController extends BaseController {
     private TreeView<String> treeViewTable;
 
     private File selectedFolder;
+    private CompressionHandler compressionHandler;
 
     @FXML
     public void initialize() {
         clearSelectedFolder();
+        this.compressionHandler = new CompressionHandler();
     }
 
     public void openSettingsPage() {
@@ -76,7 +86,19 @@ public class HomePageController extends BaseController {
     }
 
     public void chooseArchive() {
-        System.out.println("Choosing archive");
+        List<String> extensions = compressionHandler.getCompressionExtensions().stream().map(s -> "*" + s).collect(Collectors.toList());
+        String extensionFormat = String.join(", ", extensions);
+        FileChooser fileChooser = new FileChooser();
+
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(String.format("Archives (%s)", extensionFormat), extensions);
+        fileChooser.getExtensionFilters().add(filter);
+
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        if (selectedFile != null) {
+            TreeItem<String> archiveItem = new TreeItem<>(selectedFile.getName(), IconUtils.createJavaFXIcon("archive.png"));
+            treeViewTable.setRoot(archiveItem);
+        }
     }
 
     public void deArchiveSelection() {
@@ -84,6 +106,15 @@ public class HomePageController extends BaseController {
     }
 
     public void archiveSelection() {
+        // Check which compression format is chosen in the configuration.
+        //  Then open a file chooser with a filter for that compression format
+        ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
+
+        Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
+
+        System.out.println(compressionFormat.getClass());
+        System.out.println(compressionFormat.getClass().getName());
+
         FileArchive archive = new FileArchive(selectedFolder);
         System.out.println("Archiving the selection");
     }
