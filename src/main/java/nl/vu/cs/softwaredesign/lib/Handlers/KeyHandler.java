@@ -26,7 +26,8 @@ public class KeyHandler {
         String keyName = "archive.key";
         Path keyPath = Paths.get(dirPath + "/" + keyName);
 
-        Files.createFile(keyPath);
+        if (!Files.exists(keyPath))
+            Files.createFile(keyPath);
 
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");
         keyGen.init(256, SecureRandom.getInstanceStrong());

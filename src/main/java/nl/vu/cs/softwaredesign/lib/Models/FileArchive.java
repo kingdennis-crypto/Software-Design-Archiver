@@ -18,6 +18,11 @@ public class FileArchive {
         this.METADATA = new HashMap<>();
     }
 
+    public FileArchive(File root, Map<String, String> metadata) {
+        this.ROOT = root;
+        this.METADATA = metadata;
+    }
+
     /**
      * Adds metadata to the file archive.
      * @param key   The key for the metadata entry.

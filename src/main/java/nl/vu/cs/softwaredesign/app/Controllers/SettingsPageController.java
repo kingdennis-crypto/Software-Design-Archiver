@@ -13,9 +13,12 @@ import nl.vu.cs.softwaredesign.lib.Enumerations.CompressionLevel;
 import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
+import nl.vu.cs.softwaredesign.lib.Handlers.EncryptionHandler;
+import nl.vu.cs.softwaredesign.lib.Handlers.KeyHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -52,7 +55,7 @@ public class SettingsPageController extends BaseController {
      * @return List of compression formats.
      */
     private ObservableList<String> getCompressionFormats() {
-        return FXCollections.observableArrayList(CompressionHandler.getAvailableCompressions()
+        return FXCollections.observableArrayList(CompressionHandler.getAvailableCompressionsType()
                 .stream()
                 .map(CompressionType::label)
                 .collect(Collectors.toList()));
@@ -72,7 +75,7 @@ public class SettingsPageController extends BaseController {
      * Sets the values of UI components based on saved configuration settings.
      */
     private void setSettingsValues() {
-        CompressionHandler.getAvailableCompressions();
+        CompressionHandler.getAvailableCompressionsType();
 
         String format = configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT);
         String level = configurationHandler.getProperty(SettingsValue.COMPRESSION_LEVEL);
@@ -127,6 +130,23 @@ public class SettingsPageController extends BaseController {
         if (outputFolder != null) {
             outputDirTxt.setText(outputFolder.getAbsolutePath());
         }
+    }
+
+    public void resetEncryptionKey() {
+        KeyHandler keyHandler = new KeyHandler();
+
+        Runnable yes = () -> {
+            try {
+                keyHandler.createAndSetMainKey();
+            } catch (IOException | NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        showConfirmationDialog(Alert.AlertType.WARNING, "Reset encryption key",
+                "Are you sure you want to reset your encryption key? You cannot decrypt your old archives",
+                "Generate new key", "No, keep old key",
+                yes, () -> {});
     }
 
     /**
