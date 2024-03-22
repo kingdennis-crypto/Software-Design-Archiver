@@ -28,22 +28,9 @@ public class ProgressLogger implements IProgressListener {
      * If instance is null, creates a new instance and also creates the logfile
      * @return The singleton instance of ProgressLogger.
      */
-    public static ProgressLogger getInstance() {
+    public ProgressLogger getInstance() {
         if (instance == null) instance = new ProgressLogger();
         return instance;
-    }
-
-    /**
-     * Updates the progress status and writes it to the log file.
-     * @param status The status to be logged.
-     */
-    @Override
-    public void update(Status status) {
-        try (FileWriter writer = new FileWriter(logFile, true)) {
-            writer.write(status.toString() + "\n");
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
     }
 
     /**

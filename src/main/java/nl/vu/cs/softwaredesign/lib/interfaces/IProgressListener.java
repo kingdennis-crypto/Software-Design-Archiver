@@ -8,6 +8,5 @@ import java.io.File;
  * The progress listener is used to update the status of the progress process
  */
 public interface IProgressListener {
-    void update(Status status);
     void update(Status status, File file);
 }
