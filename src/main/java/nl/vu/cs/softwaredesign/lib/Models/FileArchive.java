@@ -1,10 +1,7 @@
 package nl.vu.cs.softwaredesign.lib.Models;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents an archive of files and folders and provides metadata.
@@ -82,5 +79,32 @@ public class FileArchive {
      */
     public double getSizeInMegaBytes() {
         return this.getSizeInBytes() / (1024.0 * 1024.0);
+    }
+
+    public Map<String, List<Object>> generateFileMap() {
+        Map<String, List<Object>> map = new HashMap<>();
+        generateFileMap(ROOT, map);
+        return map;
+    }
+
+    private void generateFileMap(File file, Map<String, List<Object>> map) {
+        if (file.isDirectory()) {
+            List<Object> fileList = new ArrayList<>();
+            File[] files = file.listFiles();
+
+            if (files != null) {
+                for (File fileObj : files) {
+                    if (fileObj.isDirectory()) {
+                        Map<String, List<Object>> nestedMap = new HashMap<>();
+                        generateFileMap(fileObj, nestedMap);
+                        fileList.add(nestedMap);
+                    } else {
+                        fileList.add(fileObj.getName());
+                    }
+                }
+            }
+
+            map.put(file.getName(), fileList);
+        }
     }
 }
