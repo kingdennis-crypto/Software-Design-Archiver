@@ -1,5 +1,7 @@
 package nl.vu.cs.softwaredesign.lib.Handlers;
 
+import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -7,9 +9,11 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EncryptionHandler {
-    public EncryptionHandler() {}
+    public EncryptionHandler() { }
 
     /**
      * Encrypts a file using AES/GCM/NoPadding algorithm.
@@ -18,7 +22,7 @@ public class EncryptionHandler {
      * @param secret The secret key used for encryption.
      * @param iv     The initialization vector for encryption
      */
-    public void encryptFile(String path, SecretKey secret, byte[] iv) throws FileNotFoundException {
+    public static void encryptFile(String path, SecretKey secret, byte[] iv, Map<String, String> metadata) throws FileNotFoundException {
         try {
             File inputFile = new File(path);
             File outputFile = new File(path);
@@ -32,7 +36,10 @@ public class EncryptionHandler {
             try (FileInputStream inputStream = new FileInputStream(inputFile);
                  FileOutputStream outputStream = new FileOutputStream(outputFile)) {
 
-                ByteArrayOutputStream encryptedContent = fileToByteArray(inputStream, cipher, new ByteArrayOutputStream());
+                byte[] metadataOutput = cipher.update(metadata.toString().getBytes(), 0, metadata.toString().getBytes().length);
+                outputStream.write(metadataOutput);
+
+                ByteArrayOutputStream encryptedContent = EncryptionHandler.fileToByteArray(inputStream, cipher, new ByteArrayOutputStream());
                 outputStream.write(encryptedContent.toByteArray());
             }
 
@@ -50,7 +57,7 @@ public class EncryptionHandler {
      * @param secret The secret key used for decryption.
      * @param iv     The initialization vector for decryption.
      */
-    public void decryptFile(String path, SecretKey secret, byte[] iv) throws FileNotFoundException {
+    public static FileArchive decryptFile(String path, SecretKey secret, byte[] iv) throws FileNotFoundException {
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.DECRYPT_MODE, secret, new GCMParameterSpec(128, iv));
@@ -62,10 +69,24 @@ public class EncryptionHandler {
                 throw new FileNotFoundException(String.format("File %s does not exist", inputFile.getName()));
 
             try (InputStream inputStream = new FileInputStream(inputFile)) {
-                fileToByteArray(inputStream, cipher, encryptedContent);
+                EncryptionHandler.fileToByteArray(inputStream, cipher, encryptedContent);
             }
 
             int position = 0;
+            StringBuilder metadataString = new StringBuilder();
+
+            for (int i = 0; i < encryptedContent.size(); i++) {
+                metadataString.append((char) encryptedContent.toByteArray()[i]);
+
+                if ((char) encryptedContent.toByteArray()[i] == '}') {
+                    position = i + 1;
+                    break;
+                }
+            }
+
+            Map<String, String> metadata = Arrays.stream(metadataString.substring(1, metadataString.length() - 1).split(", "))
+                    .map(pair -> pair.split("="))
+                    .collect(HashMap::new, (map, pair) -> map.put(pair[0], pair[1]), HashMap::putAll);
 
             try (OutputStream outputStream = new FileOutputStream(inputFile.getAbsoluteFile())) {
                 byte[] fileContent = Arrays.copyOfRange(encryptedContent.toByteArray(), position, encryptedContent.size());
@@ -74,10 +95,13 @@ public class EncryptionHandler {
                 if (!inputFile.delete())
                     System.out.println("Something went wrong trying to delete this file");
             }
+
+            return new FileArchive(inputFile, metadata);
         } catch (FileNotFoundException ex) {
             throw ex;
         } catch (Exception ex) {
             ex.printStackTrace();
+            return null;
         }
     }
 
@@ -92,7 +116,7 @@ public class EncryptionHandler {
      * @throws IllegalBlockSizeException    If the block size of the Cipher is invalid during transformation.
      * @throws BadPaddingException          If padding is expected but not properly applied during transformation.
      */
-    private ByteArrayOutputStream fileToByteArray(InputStream inputStream, Cipher cipher, ByteArrayOutputStream outputStream)
+    private static ByteArrayOutputStream fileToByteArray(InputStream inputStream, Cipher cipher, ByteArrayOutputStream outputStream)
             throws IOException, IllegalBlockSizeException, BadPaddingException {
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];

@@ -12,6 +12,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class KeyHandler {
+    public KeyHandler() { }
+
     /**
      * Creates a new key with the specified name.
      * @return The path to the newly created key file.
