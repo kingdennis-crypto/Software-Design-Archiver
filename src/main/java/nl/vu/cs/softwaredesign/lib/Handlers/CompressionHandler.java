@@ -14,7 +14,7 @@ public class CompressionHandler {
     public CompressionHandler() { }
 
     /**
-     * Retrieves a list of available compression formats based on the annotated compression formats
+     * Retrieves a list of available compression formats based on the annotated compression formats.
      * @return A list of compression format labels.
      */
     public static List<CompressionType> getAvailableCompressionsType() {
@@ -49,6 +49,10 @@ public class CompressionHandler {
         return classNames;
     }
 
+    /**
+     * Retrieves a list of all available compression formats.
+     * @return A list of classes representing available compression formats.
+     */
     private List<Class<ICompressionFormat>> getAllCompressionFormats() {
         List<Class<ICompressionFormat>> classes = new ArrayList<>();
 
@@ -77,6 +81,11 @@ public class CompressionHandler {
         return classes;
     }
 
+    /**
+     * Retrieves the compression format class by its label.
+     * @param label The label of the compression format.
+     * @return The compression format class corresponding to the label, or null if not found.
+     */
     public Class<ICompressionFormat> getCompressionFormatByLabel(String label) {
         List<Class<ICompressionFormat>> compressions = this.getAllCompressionFormats();
 
@@ -90,6 +99,10 @@ public class CompressionHandler {
         return null;
     }
 
+    /**
+     * Retrieves a list of available compression types.
+     * @return A list of CompressionType annotations representing available compression types.
+     */
     public List<CompressionType> getAvailableCompressionTypes() {
         List<Class<ICompressionFormat>> compressions = this.getAllCompressionFormats();
         List<CompressionType> classNames = new ArrayList<>();
@@ -104,6 +117,10 @@ public class CompressionHandler {
         return classNames;
     }
 
+    /**
+     * Retrieves a list of compression extensions.
+     * @return A list of compression extensions.
+     */
     public List<String> getCompressionExtensions() {
         return getAvailableCompressionTypes()
                 .stream()
