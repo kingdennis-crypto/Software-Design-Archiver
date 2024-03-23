@@ -66,6 +66,14 @@ public class FileArchive {
     }
 
     /**
+     * Gets the root directory of the file archive.
+     * @return The root directory of the file archive.
+     */
+    public File getROOT() {
+        return ROOT;
+    }
+
+    /**
      * Gets the total size of all files in the file archive in kilobytes.
      * @return The total size of all files in kilobytes.
      */
