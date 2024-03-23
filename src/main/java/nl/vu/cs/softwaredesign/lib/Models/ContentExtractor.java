@@ -29,8 +29,13 @@ public class ContentExtractor {
 
         Map<String, String> metadata = EncryptionHandler.readMetadataFromFile(fileArchive.getROOT().getAbsolutePath());
 
-        if (metadata != null && metadata.containsKey("password") && !metadata.get("password").equals(password))
-            throw new InvalidObjectException("Invalid password provided");
+        assert metadata != null;
+        if (!metadata.isEmpty() && metadata.containsKey("password")) {
+            String storedPassword = metadata.get("password");
+
+            if (!password.equals(storedPassword))
+                throw new InvalidObjectException("Invalid password provided");
+        }
 
         EncryptionHandler.decryptFile(fileArchive.getROOT().getAbsolutePath(), keyProperties.getSecretKey(), keyProperties.getNonce());
 

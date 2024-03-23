@@ -1,6 +1,7 @@
 package nl.vu.cs.softwaredesign.app.Controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.stage.DirectoryChooser;
@@ -11,9 +12,14 @@ import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
 import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
+import nl.vu.cs.softwaredesign.lib.Models.ContentExtractor;
+import nl.vu.cs.softwaredesign.lib.Models.ContentInserter;
 import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -93,16 +99,32 @@ public class HomePageController extends BaseController {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(String.format("Archives (%s)", extensionFormat), extensions);
         fileChooser.getExtensionFilters().add(filter);
 
-        File selectedFile = fileChooser.showOpenDialog(stage);
+        selectedFolder = fileChooser.showOpenDialog(stage);
 
-        if (selectedFile != null) {
-            TreeItem<String> archiveItem = new TreeItem<>(selectedFile.getName(), IconUtils.createJavaFXIcon("archive.png"));
+        if (selectedFolder != null) {
+            TreeItem<String> archiveItem = new TreeItem<>(selectedFolder.getName(), IconUtils.createJavaFXIcon("archive.png"));
             treeViewTable.setRoot(archiveItem);
         }
     }
 
     public void deArchiveSelection() {
-        System.out.println("De archiving the selection");
+        ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
+
+        Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
+
+        FileArchive archive = new FileArchive(selectedFolder);
+
+        try {
+            String filepath = archive.getROOT().getAbsolutePath().replaceAll(".zip", "");
+            ContentExtractor.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, filepath, "pwd");
+
+            clearSelectedFolder();
+            showAlert(Alert.AlertType.INFORMATION, "Decryption", "Successfully decrypted your archive");
+        } catch (InvalidObjectException ex) {
+            showAlert(Alert.AlertType.ERROR, "Decryption error", "The password you provided was incorrect!");
+        } catch (Exception ex) {
+            showAlert(Alert.AlertType.ERROR, "Decryption error", "Something went wrong during the decryption!");
+        }
     }
 
     public void archiveSelection() {
@@ -116,6 +138,17 @@ public class HomePageController extends BaseController {
         System.out.println(compressionFormat.getClass().getName());
 
         FileArchive archive = new FileArchive(selectedFolder);
+        archive.addMetadata("password", "pwd");
         System.out.println("Archiving the selection");
+
+        try {
+            ContentInserter.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + ".zip");
+
+            clearSelectedFolder();
+            showAlert(Alert.AlertType.INFORMATION, "Encryption", "Successfully encrypted your archive");
+        } catch (Exception ex) {
+            showAlert(Alert.AlertType.ERROR, "Encryption error", "Something went wrong during the encryption!");
+        }
+
     }
 }
