@@ -1,5 +1,7 @@
 package nl.vu.cs.softwaredesign.lib.Models;
 
+import nl.vu.cs.softwaredesign.lib.Handlers.EncryptionHandler;
+import nl.vu.cs.softwaredesign.lib.Handlers.KeyHandler;
 import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
 import java.io.IOException;
 
@@ -14,12 +16,16 @@ public class ContentInserter {
      * @param format          The compression format to use for insertion.
      * @param fileArchive     The FileArchive into which contents will be inserted.
      * @param destinationPath The destination path for the inserted contents.
-     * @param password        The password for encryption (can be null if encryption is not desired).
      * @return The FileArchive containing the inserted contents.
      * @throws IOException if an I/O error occurs during insertion.
      */
-    public FileArchive insertContents(ICompressionFormat format, FileArchive fileArchive, String destinationPath,
-                                      String password) throws IOException {
-        return format.compress(fileArchive, destinationPath, password);
+    public static FileArchive insertContents(ICompressionFormat format, FileArchive fileArchive, String destinationPath) throws IOException {
+        FileArchive archive = format.compress(fileArchive, destinationPath);
+        KeyHandler keyHandler = new KeyHandler();
+        KeyProperties keyProperties = keyHandler.getKey();
+
+        EncryptionHandler.encryptFile(archive.getROOT().getAbsolutePath(), keyProperties.getSecretKey(), keyProperties.getNonce(), fileArchive.getMetadata());
+
+        return archive;
     }
 }

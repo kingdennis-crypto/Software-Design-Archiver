@@ -1,7 +1,12 @@
 package nl.vu.cs.softwaredesign.lib.Models;
 
+import nl.vu.cs.softwaredesign.lib.Handlers.EncryptionHandler;
+import nl.vu.cs.softwaredesign.lib.Handlers.KeyHandler;
 import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
 import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class to extract contents using a compression format.
@@ -17,8 +22,18 @@ public class ContentExtractor {
      * @return                The FileArchive containing the extracted contents.
      * @throws IOException    if an I/O error occurs during extraction.
      */
-    public FileArchive extractContents(ICompressionFormat format, FileArchive fileArchive, String destinationPath,
-                                       String password) throws IOException {
-        return format.decompress(fileArchive, destinationPath, password);
+    public static FileArchive extractContents(ICompressionFormat format, FileArchive fileArchive, String destinationPath,
+                                       String password) throws IOException, InvalidObjectException {
+        KeyHandler keyHandler = new KeyHandler();
+        KeyProperties keyProperties = keyHandler.getKey();
+
+        Map<String, String> metadata = EncryptionHandler.readMetadataFromFile(fileArchive.getROOT().getAbsolutePath());
+
+        if (metadata != null && metadata.containsKey("password") && !metadata.get("password").equals(password))
+            throw new InvalidObjectException("Invalid password provided");
+
+        EncryptionHandler.decryptFile(fileArchive.getROOT().getAbsolutePath(), keyProperties.getSecretKey(), keyProperties.getNonce());
+
+        return format.decompress(fileArchive, destinationPath);
     }
 }
