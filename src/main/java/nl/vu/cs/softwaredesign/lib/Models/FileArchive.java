@@ -63,6 +63,10 @@ public class FileArchive {
                 .sum();
     }
 
+    /**
+     * Gets the root directory of the file archive.
+     * @return The root directory of the file archive.
+     */
     public File getROOT() {
         return ROOT;
     }

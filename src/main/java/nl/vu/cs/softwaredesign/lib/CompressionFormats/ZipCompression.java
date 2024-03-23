@@ -9,13 +9,20 @@ import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
 
 import java.io.*;
 
+/**
+ * Implementation of the {@link ICompressionFormat} interface for ZIP compression format.
+ * This class provides methods to compress and decompress files using ZIP format.
+ */
 @CompressionType(label="ZIP", description="Zip description")
 public class ZipCompression implements ICompressionFormat {
     /**
      * Compresses the files in the given source directory into a ZIP archive with the specified destination path.
      *
+     * @param files           The FileArchive containing files to compress.
      * @param destinationPath The path of the resulting ZIP archive.
-     * @throws IOException If an I/O error occurs during compression.
+     * @param password        The password for encryption (can be null if encryption is not desired).
+     * @return                The FileArchive representing the compressed ZIP archive.
+     * @throws IOException    If an I/O error occurs during compression.
      */
     @Override
     public FileArchive compress(FileArchive files, String destinationPath, String password) throws IOException {
@@ -36,14 +43,19 @@ public class ZipCompression implements ICompressionFormat {
     }
 
     /**
-     * Decompresses a file (not implemented yet).
-     * This method does not perform any action as decompression is pending.
+     * Decompresses the given ZIP archive into the specified destination path.
+     *
+     * @param compressedFiles The FileArchive representing the compressed ZIP archive.
+     * @param destinationPath The destination path for the decompressed files.
+     * @param password        The password for decryption (can be null if encryption is not used).
+     * @return                The FileArchive representing the decompressed files.
+     * @throws IOException    If an I/O error occurs during decompression.
      */
     @Override
-    public FileArchive decompress(FileArchive zipFiles, String destinationPath, String password) throws IOException {
+    public FileArchive decompress(FileArchive compressedFiles, String destinationPath, String password) throws IOException {
 
         try (ZipFile zipFile = new ZipFile(destinationPath)) {
-            zipFile.extractAll(zipFiles.getROOT().getAbsolutePath());
+            zipFile.extractAll(compressedFiles.getROOT().getAbsolutePath());
         }
 
         return new FileArchive(new File(destinationPath));

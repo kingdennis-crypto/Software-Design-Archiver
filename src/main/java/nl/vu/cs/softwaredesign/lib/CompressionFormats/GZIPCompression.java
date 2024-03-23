@@ -10,8 +10,21 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * A class implementing the GZIP compression format.
+ * This class provides methods to compress and decompress files using GZIP compression algorithm.
+ */
 public class GZIPCompression implements ICompressionFormat {
 
+    /**
+     * Compresses the given file archive using GZIP compression algorithm.
+     *
+     * @param fileArchive     The file archive to compress.
+     * @param destinationPath The destination path for the compressed file.
+     * @param password        The password (not used in this implementation, can be null).
+     * @return                A FileArchive object representing the compressed file.
+     * @throws IOException    If an I/O error occurs.
+     */
     @Override
     public FileArchive compress(FileArchive fileArchive, String destinationPath, String password) throws IOException {
         byte[] buffer = new byte[1024];
@@ -30,6 +43,15 @@ public class GZIPCompression implements ICompressionFormat {
         return new FileArchive(new File(destinationPath));
     }
 
+    /**
+     * Decompresses the given compressed file archive using GZIP decompression algorithm.
+     *
+     * @param compressedFiles The compressed file archive to decompress.
+     * @param destinationPath The destination path for the decompressed files.
+     * @param password        The password (not used in this implementation, can be null).
+     * @return                A FileArchive object representing the decompressed files.
+     * @throws IOException    If an I/O error occurs.
+     */
     @Override
     public FileArchive decompress(FileArchive compressedFiles, String destinationPath, String password) throws IOException {
         byte[] buffer = new byte[1024];
@@ -45,5 +67,4 @@ public class GZIPCompression implements ICompressionFormat {
 
         return new FileArchive(new File(destinationPath));
     }
-
 }
