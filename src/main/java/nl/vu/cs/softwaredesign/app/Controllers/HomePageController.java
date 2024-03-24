@@ -1,20 +1,15 @@
 package nl.vu.cs.softwaredesign.app.Controllers;
 
-import javafx.animation.KeyValue;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableMapValue;
-import javafx.beans.value.WritableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.Utils.IconUtils;
+import nl.vu.cs.softwaredesign.app.Utils.MetadataUtils;
 import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
@@ -27,7 +22,6 @@ import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
 import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.io.InvalidObjectException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -53,23 +47,58 @@ public class HomePageController extends BaseController {
     @FXML
     private Button archiveBtn;
 
+    @FXML
+    private ListView<String> metadataListView;
+
+    @FXML
+    private Button addMetadataBtn;
+
+    private MetadataUtils metadataUtils;
     private File selectedFolder;
     private CompressionHandler compressionHandler;
 
     @FXML
     public void initialize() {
-        pwdInput.visibleProperty().bind(includePwdCheckbox.selectedProperty());
-
-        clearSelectedFolder();
         this.compressionHandler = new CompressionHandler();
+        this.metadataUtils = MetadataUtils.getInstance();
+
+        pwdInput.visibleProperty().bind(includePwdCheckbox.selectedProperty());
+        clearSelectedFolder();
+        initializeMetadataListView();
+    }
+
+    private void initializeMetadataListView() {
+        ObservableMap<String, String> metadata = metadataUtils.getMetadata();
+        metadataListView.setItems(FXCollections.observableArrayList(metadata.keySet()));
+
+        metadata.addListener((MapChangeListener<String, String>) change -> {
+            metadataListView.setItems(FXCollections.observableArrayList(metadata.keySet()));
+        });
+
+        metadataListView.setOnMouseClicked(this::handleMetadataListDoubleClick);
+    }
+
+    private void handleMetadataListDoubleClick(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+            String selectedItem = metadataListView.getSelectionModel().getSelectedItem();
+
+            if (selectedItem != null && !selectedItem.isEmpty()) {
+                metadataUtils.setSelectedEntry(selectedItem);
+                openMetadataPage();
+            }
+        }
     }
 
     public void openSettingsPage() {
         openNewWindow("settings-view.fxml");
     }
 
+    public void openMetadataPage() {
+        openNewWindow("metadata-view.fxml");
+    }
+
     public void clearSelectedFolder() {
-        this.selectedFolder = null;
+        selectedFolder = null;
         TreeItem<String> rootItem = new TreeItem<>("No folder chosen");
         rootItem.setExpanded(true);
         treeViewTable.setRoot(rootItem);
@@ -82,6 +111,10 @@ public class HomePageController extends BaseController {
         deArchiveBtn.setDisable(true);
         archiveBtn.setDisable(true);
         clearBtn.setDisable(true);
+
+        metadataUtils.clear();
+        addMetadataBtn.setDisable(true);
+        metadataListView.setDisable(true);
     }
 
     private void makeTreeItem(TreeItem<String> treeItem, File rootFile) {
@@ -118,6 +151,8 @@ public class HomePageController extends BaseController {
 
             includePwdCheckbox.setSelected(false);
             includePwdCheckbox.setDisable(false);
+            addMetadataBtn.setDisable(false);
+            metadataListView.setDisable(false);
         }
     }
 
@@ -144,10 +179,18 @@ public class HomePageController extends BaseController {
             archiveBtn.setDisable(true);
             deArchiveBtn.setDisable(false);
 
+            addMetadataBtn.setDisable(true);
+            metadataListView.setDisable(false);
+
             Map<String, String> archiveMetadata = EncryptionHandler.readMetadataFromFile(selectedFolder.getAbsolutePath());
 
             if (archiveMetadata != null) {
                 populateTreeViewFromMetadata(archiveMetadata.get("content"), archiveItem);
+
+                // Remove unnecessary metadata
+                archiveMetadata.remove("content");
+                archiveMetadata.remove("password");
+                metadataUtils.addKeyValue(archiveMetadata);
             }
         }
     }
@@ -199,10 +242,10 @@ public class HomePageController extends BaseController {
 
     public void archiveSelection() {
         ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
-
         Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
 
         FileArchive archive = new FileArchive(selectedFolder);
+        archive.addMetadata(metadataUtils.getMetadata());
 
         if (includePwdCheckbox.isSelected()) {
             archive.addMetadata("password", pwdInput.getText());

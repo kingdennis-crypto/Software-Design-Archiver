@@ -2,61 +2,37 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.vu.cs.softwaredesign.app.Controllers.MetadataController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.vu.cs.softwaredesign.app.Controllers.MetadataController">
    <children>
-      <VBox alignment="CENTER" layoutX="154.0" layoutY="100.0" prefHeight="400.0" prefWidth="232.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="100.0" layoutY="88.0" prefWidth="300.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+            <VBox prefWidth="100.0">
                <children>
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="44.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="166.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label text="Key" />
-                        <Label text="Value" GridPane.rowIndex="1" />
-                        <TextField fx:id="dataKeyInput" GridPane.columnIndex="1" />
-                        <TextField fx:id="dataValueInput" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                     </children>
-                  </GridPane>
-                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                     <children>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#setMetadata" prefHeight="40.0" prefWidth="60.0" text="Set" VBox.vgrow="ALWAYS" />
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#deleteMetadata" prefHeight="40.0" prefWidth="60.0" text="Delete" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
+                  <Label text="Key" />
+                  <TextField fx:id="keyInput" />
+               </children>
+            </VBox>
+            <VBox prefWidth="100.0">
+               <children>
+                  <Label text="Value" />
+                  <TextField fx:id="valueInput" />
+               </children>
+            </VBox>
+            <HBox prefWidth="200.0" spacing="5.0">
+               <children>
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#closeMetadataWindow" text="Close" HBox.hgrow="ALWAYS" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#addMetadata" text="Add" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <ListView fx:id="metadataList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </ListView>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
-              <buttons>
-                <Button mnemonicParsing="false" text="Save" />
-                  <Button mnemonicParsing="false" onMouseClicked="#closeMetadataWindow" text="Cancel" />
-              </buttons>
-            </ButtonBar>
          </children>
          <padding>
-            <Insets left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </VBox>
    </children>
