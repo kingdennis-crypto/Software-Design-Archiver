@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.lib.Singleton;
+package nl.vu.cs.softwaredesign.lib.singletons;
 
 import nl.vu.cs.softwaredesign.lib.enumerations.Status;
 import nl.vu.cs.softwaredesign.lib.interfaces.IProgressListener;
