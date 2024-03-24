@@ -1,9 +1,8 @@
 package nl.vu.cs.softwaredesign.app.Controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.Utils.IconUtils;
@@ -11,6 +10,7 @@ import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
 import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
+import nl.vu.cs.softwaredesign.lib.Handlers.EncryptionHandler;
 import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
 import nl.vu.cs.softwaredesign.lib.Models.ContentExtractor;
 import nl.vu.cs.softwaredesign.lib.Models.ContentInserter;
@@ -29,11 +29,28 @@ public class HomePageController extends BaseController {
     @FXML
     private TreeView<String> treeViewTable;
 
+    @FXML
+    private TextField pwdInput;
+
+    @FXML
+    private CheckBox includePwdCheckbox;
+
+    @FXML
+    private Button clearBtn;
+
+    @FXML
+    private Button deArchiveBtn;
+
+    @FXML
+    private Button archiveBtn;
+
     private File selectedFolder;
     private CompressionHandler compressionHandler;
 
     @FXML
     public void initialize() {
+        pwdInput.visibleProperty().bind(includePwdCheckbox.selectedProperty());
+
         clearSelectedFolder();
         this.compressionHandler = new CompressionHandler();
     }
@@ -59,6 +76,15 @@ public class HomePageController extends BaseController {
         TreeItem<String> rootItem = new TreeItem<>("No folder chosen");
         rootItem.setExpanded(true);
         treeViewTable.setRoot(rootItem);
+
+        includePwdCheckbox.setSelected(false);
+        includePwdCheckbox.setDisable(true);
+
+        pwdInput.clear();
+
+        deArchiveBtn.setDisable(true);
+        archiveBtn.setDisable(true);
+        clearBtn.setDisable(true);
     }
 
     private void makeTreeItem(TreeItem<String> treeItem, File rootFile) {
@@ -88,6 +114,13 @@ public class HomePageController extends BaseController {
             TreeItem<String> folderItem = new TreeItem<>(selectedFolder.getName(), IconUtils.createJavaFXIcon("folder.png"));
             makeTreeItem(folderItem, selectedFolder);
             treeViewTable.setRoot(folderItem);
+
+            clearBtn.setDisable(false);
+            archiveBtn.setDisable(false);
+            deArchiveBtn.setDisable(true);
+
+            includePwdCheckbox.setSelected(false);
+            includePwdCheckbox.setDisable(false);
         }
     }
 
@@ -104,10 +137,26 @@ public class HomePageController extends BaseController {
         if (selectedFolder != null) {
             TreeItem<String> archiveItem = new TreeItem<>(selectedFolder.getName(), IconUtils.createJavaFXIcon("archive.png"));
             treeViewTable.setRoot(archiveItem);
+
+            boolean hasPassword = EncryptionHandler.isPasswordProtected(selectedFolder.getAbsolutePath());
+
+            includePwdCheckbox.setDisable(true);
+            includePwdCheckbox.setSelected(hasPassword);
+
+            clearBtn.setDisable(false);
+            archiveBtn.setDisable(true);
+            deArchiveBtn.setDisable(false);
         }
     }
 
     public void deArchiveSelection() {
+        boolean hasPassword = EncryptionHandler.isPasswordProtected(selectedFolder.getAbsolutePath());
+
+        if (hasPassword && pwdInput.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Password", "No password was provided!");
+            return;
+        }
+
         ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
 
         Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
@@ -115,15 +164,16 @@ public class HomePageController extends BaseController {
         FileArchive archive = new FileArchive(selectedFolder);
 
         try {
+            // TODO: Add way to dynamically change the extension
             String filepath = archive.getROOT().getAbsolutePath().replaceAll(".zip", "");
-            ContentExtractor.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, filepath, "pwd");
+            FileArchive deCompressed = ContentExtractor.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, filepath, pwdInput.getText());
 
             clearSelectedFolder();
-            showAlert(Alert.AlertType.INFORMATION, "Decryption", "Successfully decrypted your archive");
+            showAlert(Alert.AlertType.INFORMATION, "Decompress", String.format("Successfully decompressed your archive at: \n%s", deCompressed.getROOT().getAbsolutePath()));
         } catch (InvalidObjectException ex) {
-            showAlert(Alert.AlertType.ERROR, "Decryption error", "The password you provided was incorrect!");
+            showAlert(Alert.AlertType.WARNING, "Decompression error", "The password you provided was incorrect!");
         } catch (Exception ex) {
-            showAlert(Alert.AlertType.ERROR, "Decryption error", "Something went wrong during the decryption!");
+            showAlert(Alert.AlertType.ERROR, "Decompression error", "Something went wrong during the decryption!");
         }
     }
 
@@ -134,20 +184,19 @@ public class HomePageController extends BaseController {
 
         Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
 
-        System.out.println(compressionFormat.getClass());
-        System.out.println(compressionFormat.getClass().getName());
-
         FileArchive archive = new FileArchive(selectedFolder);
-        archive.addMetadata("password", "pwd");
-        System.out.println("Archiving the selection");
+
+        if (includePwdCheckbox.isSelected()) {
+            archive.addMetadata("password", pwdInput.getText());
+        }
 
         try {
-            ContentInserter.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + ".zip");
+            FileArchive compressed = ContentInserter.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + ".zip");
 
             clearSelectedFolder();
-            showAlert(Alert.AlertType.INFORMATION, "Encryption", "Successfully encrypted your archive");
+            showAlert(Alert.AlertType.INFORMATION, "Compressed", String.format("Successfully compressed your archive at: \n%s", compressed.getROOT().getAbsolutePath()));
         } catch (Exception ex) {
-            showAlert(Alert.AlertType.ERROR, "Encryption error", "Something went wrong during the encryption!");
+            showAlert(Alert.AlertType.ERROR, "Compression error", "Something went wrong during the encryption!");
         }
 
     }

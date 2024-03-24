@@ -39,6 +39,11 @@ public class ContentExtractor {
 
         EncryptionHandler.decryptFile(fileArchive.getROOT().getAbsolutePath(), keyProperties.getSecretKey(), keyProperties.getNonce());
 
-        return format.decompress(fileArchive, destinationPath);
+        FileArchive deArchived = format.decompress(fileArchive, destinationPath);
+
+        // TODO: Add delete check with exception
+        fileArchive.getROOT().delete();
+
+        return deArchived;
     }
 }

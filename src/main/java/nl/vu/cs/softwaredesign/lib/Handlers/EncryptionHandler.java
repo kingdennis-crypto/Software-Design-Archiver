@@ -131,4 +131,8 @@ public class EncryptionHandler {
             return null;
         }
     }
+
+    public static boolean isPasswordProtected(String path) {
+        return EncryptionHandler.readMetadataFromFile(path).containsKey("password");
+    }
 }
