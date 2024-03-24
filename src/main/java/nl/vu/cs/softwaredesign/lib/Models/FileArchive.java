@@ -29,6 +29,10 @@ public class FileArchive {
         this.METADATA.put(key, value);
     }
 
+    public void addMetadata(Map<String, String> values) {
+        this.METADATA.putAll(values);
+    }
+
     /**
      * Gets the metadata associated with the archive.
      * @return A map containing the metadata.

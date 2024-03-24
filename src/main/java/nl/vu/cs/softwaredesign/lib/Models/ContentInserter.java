@@ -22,7 +22,9 @@ public class ContentInserter {
     public static FileArchive insertContents(ICompressionFormat format, FileArchive fileArchive, String destinationPath) throws IOException {
         FileArchive archive = format.compress(fileArchive, destinationPath);
         var files = fileArchive.generateFileRepresentation();
+
         archive.addMetadata("content", files);
+        archive.addMetadata(fileArchive.getMetadata());
 
         KeyHandler keyHandler = new KeyHandler();
         KeyProperties keyProperties = keyHandler.getKey();

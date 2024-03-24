@@ -1,11 +1,20 @@
 package nl.vu.cs.softwaredesign.app.Controllers;
 
+import javafx.animation.KeyValue;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableMapValue;
+import javafx.beans.value.WritableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.Utils.IconUtils;
-import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
 import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
@@ -15,8 +24,10 @@ import nl.vu.cs.softwaredesign.lib.Models.ContentExtractor;
 import nl.vu.cs.softwaredesign.lib.Models.ContentInserter;
 import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
 
+import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.io.InvalidObjectException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -55,18 +66,6 @@ public class HomePageController extends BaseController {
 
     public void openSettingsPage() {
         openNewWindow("settings-view.fxml");
-    }
-
-    public void openReportPage() {
-        openNewWindow("report-view.fxml");
-    }
-
-    public void openTestPage() {
-        openNewWindow("test-view.fxml");
-    }
-
-    public void openMetadataPage() {
-        openNewWindow("metadata-view.fxml");
     }
 
     public void clearSelectedFolder() {
@@ -174,7 +173,7 @@ public class HomePageController extends BaseController {
         boolean hasPassword = EncryptionHandler.isPasswordProtected(selectedFolder.getAbsolutePath());
 
         if (hasPassword && pwdInput.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Password", "No password was provided!");
+            showAlert(Alert.AlertType.WARNING, "Password", "No password was provided!");
             return;
         }
 
@@ -192,7 +191,7 @@ public class HomePageController extends BaseController {
             clearSelectedFolder();
             showAlert(Alert.AlertType.INFORMATION, "Decompress", String.format("Successfully decompressed your archive at: \n%s", deCompressed.getROOT().getAbsolutePath()));
         } catch (InvalidObjectException ex) {
-            showAlert(Alert.AlertType.WARNING, "Decompression error", "The password you provided was incorrect!");
+            showAlert(Alert.AlertType.ERROR, "Decompression error", "The password you provided was incorrect!");
         } catch (Exception ex) {
             showAlert(Alert.AlertType.ERROR, "Decompression error", "Something went wrong during the decryption!");
         }
