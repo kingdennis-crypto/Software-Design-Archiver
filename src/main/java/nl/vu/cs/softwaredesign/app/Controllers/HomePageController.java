@@ -2,7 +2,6 @@ package nl.vu.cs.softwaredesign.app.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.Utils.IconUtils;
@@ -17,10 +16,9 @@ import nl.vu.cs.softwaredesign.lib.Models.ContentInserter;
 import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InvalidObjectException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -135,7 +133,7 @@ public class HomePageController extends BaseController {
         selectedFolder = fileChooser.showOpenDialog(stage);
 
         if (selectedFolder != null) {
-            TreeItem<String> archiveItem = new TreeItem<>(selectedFolder.getName(), IconUtils.createJavaFXIcon("archive.png"));
+            TreeItem<String> archiveItem = new TreeItem<>(selectedFolder.getName() + " (preview)", IconUtils.createJavaFXIcon("archive.png"));
             treeViewTable.setRoot(archiveItem);
 
             boolean hasPassword = EncryptionHandler.isPasswordProtected(selectedFolder.getAbsolutePath());
@@ -146,6 +144,29 @@ public class HomePageController extends BaseController {
             clearBtn.setDisable(false);
             archiveBtn.setDisable(true);
             deArchiveBtn.setDisable(false);
+
+            Map<String, String> archiveMetadata = EncryptionHandler.readMetadataFromFile(selectedFolder.getAbsolutePath());
+
+            if (archiveMetadata != null) {
+                populateTreeViewFromMetadata(archiveMetadata.get("content"), archiveItem);
+            }
+        }
+    }
+
+    private void populateTreeViewFromMetadata(String metadataString, TreeItem<String> parentItem) {
+        String[] lines = metadataString.split("\n");
+
+        TreeItem<String> currentParent = parentItem;
+
+        for (String line : lines) {
+            String itemName = line.trim().replaceAll("[\\[\\]-]", "");
+            if (line.matches("^\\s*\\[.*]$")) {
+                TreeItem<String> directoryItem = new TreeItem<>(itemName, IconUtils.createJavaFXIcon("folder.png"));
+                currentParent.getChildren().add(directoryItem);
+                currentParent = directoryItem;
+            } else if (line.matches("^\\s*- .*")) {
+                currentParent.getChildren().add(new TreeItem<>(itemName, IconUtils.createJavaFXIcon("file.png")));
+            }
         }
     }
 
@@ -178,8 +199,6 @@ public class HomePageController extends BaseController {
     }
 
     public void archiveSelection() {
-        // Check which compression format is chosen in the configuration.
-        //  Then open a file chooser with a filter for that compression format
         ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
 
         Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
@@ -198,6 +217,5 @@ public class HomePageController extends BaseController {
         } catch (Exception ex) {
             showAlert(Alert.AlertType.ERROR, "Compression error", "Something went wrong during the encryption!");
         }
-
     }
 }

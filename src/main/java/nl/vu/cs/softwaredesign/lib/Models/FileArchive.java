@@ -89,30 +89,41 @@ public class FileArchive {
         return this.getSizeInBytes() / (1024.0 * 1024.0);
     }
 
-    public Map<String, List<Object>> generateFileMap() {
-        Map<String, List<Object>> map = new HashMap<>();
-        generateFileMap(ROOT, map);
-        return map;
+    public String generateFileRepresentation() {
+        StringBuilder stringBuilder = new StringBuilder();
+        generateFileRepresentationHelper(getROOT(), 0, stringBuilder);
+        return stringBuilder.toString();
     }
 
-    private void generateFileMap(File file, Map<String, List<Object>> map) {
-        if (file.isDirectory()) {
-            List<Object> fileList = new ArrayList<>();
-            File[] files = file.listFiles();
+    private void generateFileRepresentationHelper(File directory, int depth, StringBuilder stringBuilder) {
+        if (directory.isDirectory()) {
+            stringBuilder
+                    .append(getIndent(depth))
+                    .append("[")
+                    .append(directory.getName())
+                    .append("]")
+                    .append("\n");
 
+            File[] files = directory.listFiles();
             if (files != null) {
-                for (File fileObj : files) {
-                    if (fileObj.isDirectory()) {
-                        Map<String, List<Object>> nestedMap = new HashMap<>();
-                        generateFileMap(fileObj, nestedMap);
-                        fileList.add(nestedMap);
-                    } else {
-                        fileList.add(fileObj.getName());
-                    }
+                for (File file : files) {
+                    generateFileRepresentationHelper(file, depth + 1, stringBuilder);
                 }
             }
-
-            map.put(file.getName(), fileList);
+        } else {
+            stringBuilder
+                    .append(getIndent(depth))
+                    .append("- ")
+                    .append(directory.getName())
+                    .append("\n");
         }
+    }
+
+    private String getIndent(int depth) {
+        StringBuilder indent = new StringBuilder();
+        for (int i = 0; i < depth; i++) {
+            indent.append(" ");
+        }
+        return indent.toString();
     }
 }
