@@ -1,11 +1,10 @@
-package nl.vu.cs.softwaredesign.lib.Models;
+package nl.vu.cs.softwaredesign.lib.models;
 
-import nl.vu.cs.softwaredesign.lib.Handlers.EncryptionHandler;
-import nl.vu.cs.softwaredesign.lib.Handlers.KeyHandler;
-import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
+import nl.vu.cs.softwaredesign.lib.handlers.EncryptionHandler;
+import nl.vu.cs.softwaredesign.lib.handlers.KeyHandler;
+import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
 import java.io.IOException;
 import java.io.InvalidObjectException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

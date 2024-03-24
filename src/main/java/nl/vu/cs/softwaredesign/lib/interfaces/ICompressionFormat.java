@@ -1,6 +1,6 @@
-package nl.vu.cs.softwaredesign.lib.Interfaces;
+package nl.vu.cs.softwaredesign.lib.interfaces;
 
-import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
+import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 import java.io.IOException;
 
 /**

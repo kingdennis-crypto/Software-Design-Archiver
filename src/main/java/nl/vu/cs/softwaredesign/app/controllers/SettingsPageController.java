@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.app.Controllers;
+package nl.vu.cs.softwaredesign.app.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,13 +8,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
-import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
-import nl.vu.cs.softwaredesign.lib.Enumerations.CompressionLevel;
-import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
-import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
-import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
-import nl.vu.cs.softwaredesign.lib.Handlers.EncryptionHandler;
-import nl.vu.cs.softwaredesign.lib.Handlers.KeyHandler;
+import nl.vu.cs.softwaredesign.lib.annotations.CompressionType;
+import nl.vu.cs.softwaredesign.lib.enumerations.CompressionLevel;
+import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
+import nl.vu.cs.softwaredesign.lib.handlers.CompressionHandler;
+import nl.vu.cs.softwaredesign.lib.handlers.ConfigurationHandler;
+import nl.vu.cs.softwaredesign.lib.handlers.KeyHandler;
 
 import java.io.File;
 import java.io.IOException;

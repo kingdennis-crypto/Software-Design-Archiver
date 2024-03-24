@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.app.Controllers;
+package nl.vu.cs.softwaredesign.app.controllers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

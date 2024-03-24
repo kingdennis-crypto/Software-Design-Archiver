@@ -1,11 +1,10 @@
-package nl.vu.cs.softwaredesign.lib.CompressionFormats;
+package nl.vu.cs.softwaredesign.lib.compressionformats;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.model.enums.EncryptionMethod;
-import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
-import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
-import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
+import nl.vu.cs.softwaredesign.lib.annotations.CompressionType;
+import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
+import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 
 import java.io.*;
 

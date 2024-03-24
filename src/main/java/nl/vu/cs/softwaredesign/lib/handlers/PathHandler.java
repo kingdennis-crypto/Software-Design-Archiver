@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.lib.Handlers;
+package nl.vu.cs.softwaredesign.lib.handlers;
 
 public class PathHandler {
     /**

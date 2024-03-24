@@ -1,6 +1,5 @@
-package nl.vu.cs.softwaredesign.lib.Models;
+package nl.vu.cs.softwaredesign.lib.models;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 

@@ -1,13 +1,10 @@
-package nl.vu.cs.softwaredesign.lib.Handlers;
+package nl.vu.cs.softwaredesign.lib.handlers;
 
-import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
-import nl.vu.cs.softwaredesign.lib.Models.KeyProperties;
+import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 
 import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 public class EncryptionHandler {

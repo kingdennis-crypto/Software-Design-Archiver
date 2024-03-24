@@ -1,6 +1,6 @@
-package nl.vu.cs.softwaredesign.lib.Handlers;
+package nl.vu.cs.softwaredesign.lib.handlers;
 
-import nl.vu.cs.softwaredesign.lib.Models.KeyProperties;
+import nl.vu.cs.softwaredesign.lib.models.KeyProperties;
 
 import javax.crypto.KeyGenerator;
 import java.io.FileNotFoundException;

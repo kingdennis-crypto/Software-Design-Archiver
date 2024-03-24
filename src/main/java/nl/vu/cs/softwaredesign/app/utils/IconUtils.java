@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.app.Utils;
+package nl.vu.cs.softwaredesign.app.utils;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

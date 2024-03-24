@@ -1,7 +1,7 @@
-package nl.vu.cs.softwaredesign.lib.Handlers;
+package nl.vu.cs.softwaredesign.lib.handlers;
 
-import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
-import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
+import nl.vu.cs.softwaredesign.lib.annotations.CompressionType;
+import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
 
 import java.io.File;
 import java.util.ArrayList;

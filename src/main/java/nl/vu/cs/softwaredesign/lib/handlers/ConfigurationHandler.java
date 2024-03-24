@@ -1,6 +1,6 @@
-package nl.vu.cs.softwaredesign.lib.Handlers;
+package nl.vu.cs.softwaredesign.lib.handlers;
 
-import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
+import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;

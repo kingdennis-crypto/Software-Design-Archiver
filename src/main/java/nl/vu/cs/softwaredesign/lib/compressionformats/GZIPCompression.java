@@ -1,8 +1,8 @@
-package nl.vu.cs.softwaredesign.lib.CompressionFormats;
+package nl.vu.cs.softwaredesign.lib.compressionformats;
 
-import nl.vu.cs.softwaredesign.lib.Annotations.CompressionType;
-import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
-import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
+import nl.vu.cs.softwaredesign.lib.annotations.CompressionType;
+import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
+import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 
 import java.io.File;
 import java.io.FileInputStream;

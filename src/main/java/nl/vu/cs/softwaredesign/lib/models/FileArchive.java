@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.lib.Models;
+package nl.vu.cs.softwaredesign.lib.models;
 
 import java.io.File;
 import java.util.*;

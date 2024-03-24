@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.lib.Annotations;
+package nl.vu.cs.softwaredesign.lib.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

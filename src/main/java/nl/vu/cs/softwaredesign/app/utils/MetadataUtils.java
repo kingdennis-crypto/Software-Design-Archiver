@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.app.Utils;
+package nl.vu.cs.softwaredesign.app.utils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;

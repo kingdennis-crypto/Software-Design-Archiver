@@ -1,8 +1,8 @@
-package nl.vu.cs.softwaredesign.app.Controllers;
+package nl.vu.cs.softwaredesign.app.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import nl.vu.cs.softwaredesign.app.Utils.MetadataUtils;
+import nl.vu.cs.softwaredesign.app.utils.MetadataUtils;
 
 import java.util.Map;
 

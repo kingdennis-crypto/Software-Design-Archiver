@@ -4,8 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import nl.vu.cs.softwaredesign.app.Utils.MetadataUtils;
-import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
+import nl.vu.cs.softwaredesign.app.utils.MetadataUtils;
+import nl.vu.cs.softwaredesign.lib.handlers.ConfigurationHandler;
 
 import java.io.IOException;
 

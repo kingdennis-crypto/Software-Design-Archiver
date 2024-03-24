@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.lib.Enumerations;
+package nl.vu.cs.softwaredesign.lib.enumerations;
 
 public enum SettingsValue {
     COMPRESSION_FORMAT("compression_format"),

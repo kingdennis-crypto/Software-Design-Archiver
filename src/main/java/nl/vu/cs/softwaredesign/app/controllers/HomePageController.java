@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.app.Controllers;
+package nl.vu.cs.softwaredesign.app.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
@@ -8,16 +8,16 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import nl.vu.cs.softwaredesign.app.Utils.IconUtils;
-import nl.vu.cs.softwaredesign.app.Utils.MetadataUtils;
-import nl.vu.cs.softwaredesign.lib.Enumerations.SettingsValue;
-import nl.vu.cs.softwaredesign.lib.Handlers.CompressionHandler;
-import nl.vu.cs.softwaredesign.lib.Handlers.ConfigurationHandler;
-import nl.vu.cs.softwaredesign.lib.Handlers.EncryptionHandler;
-import nl.vu.cs.softwaredesign.lib.Interfaces.ICompressionFormat;
-import nl.vu.cs.softwaredesign.lib.Models.ContentExtractor;
-import nl.vu.cs.softwaredesign.lib.Models.ContentInserter;
-import nl.vu.cs.softwaredesign.lib.Models.FileArchive;
+import nl.vu.cs.softwaredesign.app.utils.IconUtils;
+import nl.vu.cs.softwaredesign.app.utils.MetadataUtils;
+import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
+import nl.vu.cs.softwaredesign.lib.handlers.CompressionHandler;
+import nl.vu.cs.softwaredesign.lib.handlers.ConfigurationHandler;
+import nl.vu.cs.softwaredesign.lib.handlers.EncryptionHandler;
+import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
+import nl.vu.cs.softwaredesign.lib.models.ContentExtractor;
+import nl.vu.cs.softwaredesign.lib.models.ContentInserter;
+import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 
 import javafx.scene.input.MouseEvent;
 import java.io.File;
