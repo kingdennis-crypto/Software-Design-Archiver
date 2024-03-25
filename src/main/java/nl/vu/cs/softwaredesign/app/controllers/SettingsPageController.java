@@ -28,13 +28,13 @@ public class SettingsPageController extends BaseController {
     private ComboBox<String> compressionFormatCombo;
 
     @FXML
-    private ComboBox<String> compressionLevelCombo;
-
-    @FXML
     private TextField excludeFilesInput;
 
     @FXML
     private Text outputDirTxt;
+
+    private final String EMPTY_OUTPUT = "No default output selected!";
+    private final String EMPTY_EXCLUDE = "No file types to exclude";
 
     /**
      * Sets upt the configuration handler and populates all fields with settings if they exists
@@ -43,10 +43,16 @@ public class SettingsPageController extends BaseController {
     public void initialize() {
         this.configurationHandler = ConfigurationHandler.getInstance();
 
-        this.compressionFormatCombo.setItems(getCompressionFormats());
-        this.compressionLevelCombo.setItems(getCompressionLevels());
-
+        setDefaultSettings();
         setSettingsValues();
+    }
+
+    private void setDefaultSettings() {
+        this.compressionFormatCombo.setItems(getCompressionFormats());
+        this.compressionFormatCombo.getSelectionModel().select(0);
+
+        this.excludeFilesInput.setPromptText(EMPTY_EXCLUDE);
+        this.outputDirTxt.setText(EMPTY_OUTPUT);
     }
 
     /**
@@ -61,30 +67,21 @@ public class SettingsPageController extends BaseController {
     }
 
     /**
-     * Retrieves a list of compression levels for the combo box.
-     * @return List of compression levels.
-     */
-    private ObservableList<String> getCompressionLevels() {
-        return FXCollections.observableArrayList(Arrays.stream(CompressionLevel.values())
-                .map(level -> level.label)
-                .collect(Collectors.toList()));
-    }
-
-    /**
      * Sets the values of UI components based on saved configuration settings.
      */
     private void setSettingsValues() {
-        CompressionHandler.getAvailableCompressionsType();
-
         String format = configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT);
-        String level = configurationHandler.getProperty(SettingsValue.COMPRESSION_LEVEL);
         String exclude = configurationHandler.getProperty(SettingsValue.EXCLUDE_FILES);
         String output = configurationHandler.getProperty(SettingsValue.DEFAULT_OUTPUT);
 
-        this.compressionFormatCombo.setValue(format);
-        this.compressionLevelCombo.setValue(level);
-        this.excludeFilesInput.setText(exclude);
-        this.outputDirTxt.setText(output);
+        if (format != null)
+            this.compressionFormatCombo.setValue(format);
+
+        if (exclude != null)
+            this.excludeFilesInput.setText(exclude);
+
+        if (output != null)
+            this.outputDirTxt.setText(output);
     }
 
     /**
@@ -92,9 +89,12 @@ public class SettingsPageController extends BaseController {
      */
     public void saveProperties() {
         configurationHandler.setProperty(SettingsValue.COMPRESSION_FORMAT, compressionFormatCombo.getValue());
-        configurationHandler.setProperty(SettingsValue.COMPRESSION_LEVEL, compressionLevelCombo.getValue());
-        configurationHandler.setProperty(SettingsValue.EXCLUDE_FILES, excludeFilesInput.getText());
-        configurationHandler.setProperty(SettingsValue.DEFAULT_OUTPUT, outputDirTxt.getText());
+
+        if (!excludeFilesInput.getText().isEmpty())
+            configurationHandler.setProperty(SettingsValue.EXCLUDE_FILES, excludeFilesInput.getText());
+
+        if (!outputDirTxt.getText().equals(EMPTY_OUTPUT))
+            configurationHandler.setProperty(SettingsValue.DEFAULT_OUTPUT, outputDirTxt.getText());
 
         try {
             configurationHandler.saveProperties();
