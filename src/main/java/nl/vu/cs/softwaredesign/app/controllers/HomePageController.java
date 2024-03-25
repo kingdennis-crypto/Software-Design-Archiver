@@ -11,12 +11,11 @@ import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.utils.IconUtils;
 import nl.vu.cs.softwaredesign.app.utils.MetadataUtils;
 import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
+import nl.vu.cs.softwaredesign.lib.handlers.ArchiveHandler;
 import nl.vu.cs.softwaredesign.lib.handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.handlers.ConfigurationHandler;
 import nl.vu.cs.softwaredesign.lib.handlers.EncryptionHandler;
 import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
-import nl.vu.cs.softwaredesign.lib.models.ContentExtractor;
-import nl.vu.cs.softwaredesign.lib.models.ContentInserter;
 import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 
 import javafx.scene.input.MouseEvent;
@@ -229,7 +228,7 @@ public class HomePageController extends BaseController {
         try {
             // TODO: Add way to dynamically change the extension
             String filepath = archive.getROOT().getAbsolutePath().replaceAll(".zip", "");
-            FileArchive deCompressed = ContentExtractor.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, filepath, pwdInput.getText());
+            FileArchive deCompressed = ArchiveHandler.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, filepath, pwdInput.getText());
 
             clearSelectedFolder();
             showAlert(Alert.AlertType.INFORMATION, "Decompress", String.format("Successfully decompressed your archive at: \n%s", deCompressed.getROOT().getAbsolutePath()));
@@ -252,7 +251,7 @@ public class HomePageController extends BaseController {
         }
 
         try {
-            FileArchive compressed = ContentInserter.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + ".zip");
+            FileArchive compressed = ArchiveHandler.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + ".zip");
 
             clearSelectedFolder();
             showAlert(Alert.AlertType.INFORMATION, "Compressed", String.format("Successfully compressed your archive at: \n%s", compressed.getROOT().getAbsolutePath()));
