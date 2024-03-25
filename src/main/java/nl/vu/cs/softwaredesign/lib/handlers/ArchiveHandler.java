@@ -1,5 +1,6 @@
 package nl.vu.cs.softwaredesign.lib.handlers;
 
+import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
 import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 import nl.vu.cs.softwaredesign.lib.models.KeyProperties;
@@ -63,7 +64,9 @@ public class ArchiveHandler {
 
         EncryptionHandler.decryptFile(fileArchive.getROOT().getAbsolutePath(), keyProperties.getSecretKey(), keyProperties.getNonce());
 
-        FileArchive deArchived = format.decompress(fileArchive, destinationPath);
+        String defaultDestination = ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_OUTPUT);
+
+        FileArchive deArchived = format.decompress(fileArchive, defaultDestination == null ? destinationPath : defaultDestination);
 
         // TODO: Add delete check with exception
         fileArchive.getROOT().delete();
