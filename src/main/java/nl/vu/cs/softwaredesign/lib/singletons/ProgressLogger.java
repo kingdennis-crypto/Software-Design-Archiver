@@ -6,6 +6,9 @@ import nl.vu.cs.softwaredesign.lib.interfaces.IProgressListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 /**
  * ProgressLogger class implements the IProgressListener interface and provides
@@ -13,13 +16,13 @@ import java.io.IOException;
  */
 public class ProgressLogger implements IProgressListener {
     private static ProgressLogger instance;
-    private File logFile;
+    public File logFile;
 
     /**
      * Private constructor to prevent instantiation from outside the class.
      * Initializes the log file.
      */
-    private ProgressLogger() {
+    public ProgressLogger() {
         logFile = new File("logfile.txt");
     }
 
@@ -34,17 +37,31 @@ public class ProgressLogger implements IProgressListener {
     }
 
     /**
-     * Updates the progress status for the existing file and writes it to the file.
+     * Updates the progress status for the existing file and writes it to the logfile.
      * @param status The status to be logged.
      * @param file The existing file to log the status to.
      */
     @Override
     public void update(Status status, File file) {
-        try (FileWriter writer = new FileWriter(file, true)) {
-            writer.write(status.toString() + "\n");
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = currentTime.format(formatter);
+
+        try (FileWriter writer = new FileWriter(logFile, true)) {
+            writer.write(status.label + " " + formattedTime + "\n");
         } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
+
+
+    /**
+     * Deletes the logfile.
+     */
+    public void deleteLogFile() {
+        logFile.delete();
+    }
+
+
 }
 

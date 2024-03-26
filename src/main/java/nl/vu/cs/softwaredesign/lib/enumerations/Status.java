@@ -6,7 +6,12 @@ package nl.vu.cs.softwaredesign.lib.enumerations;
  * FINISHED: the process has finished
  */
 public enum Status {
-    COMPILING,
-    FINISHED
+    COMPILING("Compiling"),
+    FINISHED("Finished");
+
+    public final String label;
+
+    Status(String label) {this.label = label;}
+
 }
 

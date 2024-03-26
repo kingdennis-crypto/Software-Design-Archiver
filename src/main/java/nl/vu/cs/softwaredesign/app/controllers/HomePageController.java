@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.utils.IconUtils;
 import nl.vu.cs.softwaredesign.app.utils.MetadataUtils;
 import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
+import nl.vu.cs.softwaredesign.lib.enumerations.Status;
 import nl.vu.cs.softwaredesign.lib.handlers.ArchiveHandler;
 import nl.vu.cs.softwaredesign.lib.handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.handlers.ConfigurationHandler;
@@ -19,6 +20,8 @@ import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
 import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 
 import javafx.scene.input.MouseEvent;
+import nl.vu.cs.softwaredesign.lib.singletons.ProgressLogger;
+
 import java.io.File;
 import java.io.InvalidObjectException;
 import java.util.List;
@@ -134,6 +137,7 @@ public class HomePageController extends BaseController {
     }
 
     public void chooseFolder() {
+
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select folder");
 
@@ -212,6 +216,9 @@ public class HomePageController extends BaseController {
     }
 
     public void deArchiveSelection() {
+        ProgressLogger progressLogger = ProgressLogger.getInstance();
+        progressLogger.update(Status.COMPILING, progressLogger.logFile);
+
         boolean hasPassword = EncryptionHandler.isPasswordProtected(selectedFolder.getAbsolutePath());
 
         if (hasPassword && pwdInput.getText().isEmpty()) {
@@ -237,9 +244,15 @@ public class HomePageController extends BaseController {
         } catch (Exception ex) {
             showAlert(Alert.AlertType.ERROR, "Decompression error", "Something went wrong during the decryption!");
         }
+
+        progressLogger.update(Status.FINISHED, progressLogger.logFile);
     }
 
     public void archiveSelection() {
+
+        ProgressLogger progressLogger = ProgressLogger.getInstance();
+        progressLogger.update(Status.COMPILING, progressLogger.logFile);
+
         ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
         Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
 
@@ -251,6 +264,7 @@ public class HomePageController extends BaseController {
         }
 
         try {
+
             FileArchive compressed = ArchiveHandler.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + ".zip");
 
             clearSelectedFolder();
@@ -258,5 +272,7 @@ public class HomePageController extends BaseController {
         } catch (Exception ex) {
             showAlert(Alert.AlertType.ERROR, "Compression error", "Something went wrong during the encryption!");
         }
+
+        progressLogger.update(Status.FINISHED, progressLogger.logFile);
     }
 }
