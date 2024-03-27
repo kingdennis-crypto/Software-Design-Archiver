@@ -27,30 +27,18 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class HomePageController extends BaseController {
-
     @FXML
     private TreeView<String> treeViewTable;
-
     @FXML
     private TextField pwdInput;
-
     @FXML
     private CheckBox includePwdCheckbox;
-
     @FXML
-    private Button clearBtn;
-
+    private Button clearBtn, deArchiveBtn, archiveBtn, addMetadataBtn;
     @FXML
-    private Button deArchiveBtn;
-
-    @FXML
-    private Button archiveBtn;
-
+    private MenuItem settingsMenuItem, selectFolderMenuItem, selectArchiveMenuItem;
     @FXML
     private ListView<String> metadataListView;
-
-    @FXML
-    private Button addMetadataBtn;
 
     private MetadataUtils metadataUtils;
     private File selectedFolder;
@@ -64,6 +52,16 @@ public class HomePageController extends BaseController {
         pwdInput.visibleProperty().bind(includePwdCheckbox.selectedProperty());
         clearSelectedFolder();
         initializeMetadataListView();
+        initializeIcons();
+    }
+
+    private void initializeIcons() {
+        archiveBtn.setGraphic(IconUtils.createJavaFXIcon("archive.png"));
+        deArchiveBtn.setGraphic(IconUtils.createJavaFXIcon("dearchive.png"));
+
+        settingsMenuItem.setGraphic(IconUtils.createJavaFXIcon("settings.png"));
+        selectArchiveMenuItem.setGraphic(IconUtils.createJavaFXIcon("archive.png"));
+        selectFolderMenuItem.setGraphic(IconUtils.createJavaFXIcon("folder.png"));
     }
 
     private void initializeMetadataListView() {

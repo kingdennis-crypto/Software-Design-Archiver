@@ -82,13 +82,13 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Settings" />
+              <MenuItem fx:id="settingsMenuItem" mnemonicParsing="false" onAction="#openSettingsPage" text="Settings" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Select">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#chooseFolder" text="Folder" />
-                  <MenuItem mnemonicParsing="false" onAction="#chooseArchive" text="Archive" />
+              <MenuItem fx:id="selectFolderMenuItem" mnemonicParsing="false" onAction="#chooseFolder" text="Folder" />
+                  <MenuItem fx:id="selectArchiveMenuItem" mnemonicParsing="false" onAction="#chooseArchive" text="Archive" />
             </items>
           </Menu>
         </menus>
