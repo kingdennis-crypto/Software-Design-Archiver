@@ -45,7 +45,7 @@
               <buttons>
                 <Button defaultButton="true" mnemonicParsing="false" onMouseClicked="#saveProperties" style="-fx-background-color: #0077b3;" text="Save" textFill="WHITE" />
                   <Button mnemonicParsing="false" onMouseClicked="#resetProperties" style="-fx-background-color: #0077b3;" text="Reset" textFill="WHITE" />
-                  <Button cancelButton="true" mnemonicParsing="false" onMouseClicked="#cancelSettingsView" style="-fx-background-color: #0077b3;" text="Cancel" textFill="WHITE" />
+                  <Button cancelButton="true" mnemonicParsing="false" onMouseClicked="#cancelSettingsView" style="-fx-background-color: #0077b3;" text="Close" textFill="WHITE" />
               </buttons>
             </ButtonBar>
          </children>
