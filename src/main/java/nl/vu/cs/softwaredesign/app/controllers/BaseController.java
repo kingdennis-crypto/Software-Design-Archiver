@@ -137,10 +137,8 @@ public abstract class BaseController {
                 if (yesAction != null) {
                     yesAction.run();
                 }
-            } else if (response == noButton) {
-                if (noAction != null) {
+            } else if (response == noButton && (noAction != null)) {
                     noAction.run();
-                }
             }
         });
     }

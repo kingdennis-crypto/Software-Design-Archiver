@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CompressionHandler {
-    public CompressionHandler() { }
+    private static final String JAVA_FILE = ".java";
 
     /**
      * Retrieves a list of available compression formats based on the annotated compression formats.
@@ -27,8 +27,8 @@ public class CompressionHandler {
         if (directory.exists() && directory.isDirectory()) {
             for (File file : Objects.requireNonNull(directory.listFiles())) {
                 // Check if the file is a Java class file
-                if (file.isFile() && file.getName().endsWith(".java")) {
-                    String className = file.getName().replace(".java", "");
+                if (file.isFile() && file.getName().endsWith(JAVA_FILE)) {
+                    String className = file.getName().replace(JAVA_FILE, "");
 
                     try {
                         // Load the class
@@ -62,8 +62,8 @@ public class CompressionHandler {
         if (directory.exists() && directory.isDirectory()) {
             for (File file : Objects.requireNonNull(directory.listFiles())) {
                 // Check if the file is a java class file
-                if (file.isFile() && file.getName().endsWith(".java")) {
-                    String className = file.getName().replace(".java", "");
+                if (file.isFile() && file.getName().endsWith(JAVA_FILE)) {
+                    String className = file.getName().replace(JAVA_FILE, "");
 
                     try {
                         @SuppressWarnings("unchecked")

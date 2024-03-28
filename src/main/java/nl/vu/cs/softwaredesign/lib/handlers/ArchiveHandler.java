@@ -10,6 +10,9 @@ import java.io.InvalidObjectException;
 import java.util.Map;
 
 public class ArchiveHandler {
+    private ArchiveHandler() {
+    }
+
     /**
      * Inserts contents into a FileArchive using the provided compression format.
      *

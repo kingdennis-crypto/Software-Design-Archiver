@@ -5,10 +5,11 @@ import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import java.io.*;
+import java.util.Collections;
 import java.util.Map;
 
 public class EncryptionHandler {
-    public EncryptionHandler() { }
+    private EncryptionHandler() { }
 
     /**
      * Encrypts a file using AES/GCM/NoPadding algorithm and stores the metadata in plain text.
@@ -125,7 +126,7 @@ public class EncryptionHandler {
             return (Map<String, String>) objectInputStream.readObject();
         } catch (Exception ex) {
             ex.printStackTrace();
-            return null;
+            return Collections.emptyMap();
         }
     }
 

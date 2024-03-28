@@ -9,9 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
+import static java.lang.System.*;
+
 public class ConfigurationHandler {
     private static ConfigurationHandler instance;
     private final Properties properties;
+    private static final String CONFIG_PROPERTIES_DIRECTORY = "/config.properties";
 
     private ConfigurationHandler() {
         this.properties = new Properties();
@@ -19,7 +22,7 @@ public class ConfigurationHandler {
         try {
             // Get the configuration directory path and file path
             Path configDir = Path.of(PathHandler.getUserDataPath());
-            Path configFile = Path.of(configDir + "/config.properties");
+            Path configFile = Path.of(configDir + CONFIG_PROPERTIES_DIRECTORY);
 
             if (Files.notExists(configDir)) {
                 Files.createDirectories(configDir);
@@ -29,6 +32,7 @@ public class ConfigurationHandler {
             if (Files.exists(configFile)) {
                 // Load the existing properties
                 this.properties.load(new FileInputStream(String.valueOf(configFile)));
+
             } else {
                 // Create a new config file
                 Files.createFile(configFile);
@@ -72,10 +76,10 @@ public class ConfigurationHandler {
      * Saves the current configuration properties to the configuration file.
      */
     public void saveProperties() throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(Path.of(PathHandler.getUserDataPath() + "/config.properties"))) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Path.of(PathHandler.getUserDataPath() + CONFIG_PROPERTIES_DIRECTORY))) {
             properties.store(writer, "Updated properties");
         } catch (IOException ex) {
-            System.err.println("Error saving properties file: " + ex.getMessage());
+            err.println("Error saving properties file: " + ex.getMessage());
             throw ex;
         }
     }
@@ -85,9 +89,9 @@ public class ConfigurationHandler {
      */
     public void resetSavedProperties() throws IOException {
         try {
-            this.properties.load(new FileInputStream(PathHandler.getUserDataPath() + "/config.properties"));
+            this.properties.load(new FileInputStream(PathHandler.getUserDataPath() + CONFIG_PROPERTIES_DIRECTORY));
         } catch (IOException ex) {
-            System.err.println("Error resetting properties file: " + ex.getMessage());
+            err.println("Error resetting properties file: " + ex.getMessage());
             throw ex;
         }
     }

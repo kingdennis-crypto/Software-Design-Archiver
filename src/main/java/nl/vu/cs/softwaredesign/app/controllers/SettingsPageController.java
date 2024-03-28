@@ -9,7 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import nl.vu.cs.softwaredesign.lib.annotations.CompressionType;
-import nl.vu.cs.softwaredesign.lib.enumerations.CompressionLevel;
 import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.handlers.ConfigurationHandler;
@@ -18,7 +17,6 @@ import nl.vu.cs.softwaredesign.lib.handlers.KeyHandler;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class SettingsPageController extends BaseController {
@@ -33,8 +31,7 @@ public class SettingsPageController extends BaseController {
     @FXML
     private Text outputDirTxt;
 
-    private final String EMPTY_OUTPUT = "No default output selected!";
-    private final String EMPTY_EXCLUDE = "No file types to exclude";
+    private static final String EMPTY_OUTPUT = "No_default_output_selected!";
 
     /**
      * Sets upt the configuration handler and populates all fields with settings if they exists
@@ -51,7 +48,8 @@ public class SettingsPageController extends BaseController {
         this.compressionFormatCombo.setItems(getCompressionFormats());
         this.compressionFormatCombo.getSelectionModel().select(0);
 
-        this.excludeFilesInput.setPromptText(EMPTY_EXCLUDE);
+        String emptyExclude = "No file types to exclude";
+        this.excludeFilesInput.setPromptText(emptyExclude);
         this.outputDirTxt.setText(EMPTY_OUTPUT);
     }
 

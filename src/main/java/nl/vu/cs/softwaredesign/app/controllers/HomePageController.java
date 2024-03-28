@@ -27,6 +27,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class HomePageController extends BaseController {
+    private static final String ARCHIVE_PICTURE = "archive.png";
+    private static final String FOLDER_PICTURE = "folder.png";
+
     @FXML
     private TreeView<String> treeViewTable;
     @FXML
@@ -34,9 +37,19 @@ public class HomePageController extends BaseController {
     @FXML
     private CheckBox includePwdCheckbox;
     @FXML
-    private Button clearBtn, deArchiveBtn, archiveBtn, addMetadataBtn;
+    private Button clearBtn;
     @FXML
-    private MenuItem settingsMenuItem, selectFolderMenuItem, selectArchiveMenuItem;
+    private Button deArchiveBtn;
+    @FXML
+    private Button archiveBtn;
+    @FXML
+    private Button addMetadataBtn;
+    @FXML
+    private MenuItem settingsMenuItem;
+    @FXML
+    private MenuItem selectFolderMenuItem;
+    @FXML
+    private MenuItem selectArchiveMenuItem;
     @FXML
     private ListView<String> metadataListView;
 
@@ -56,21 +69,19 @@ public class HomePageController extends BaseController {
     }
 
     private void initializeIcons() {
-        archiveBtn.setGraphic(IconUtils.createJavaFXIcon("archive.png"));
+        archiveBtn.setGraphic(IconUtils.createJavaFXIcon(ARCHIVE_PICTURE));
         deArchiveBtn.setGraphic(IconUtils.createJavaFXIcon("dearchive.png"));
 
         settingsMenuItem.setGraphic(IconUtils.createJavaFXIcon("settings.png"));
-        selectArchiveMenuItem.setGraphic(IconUtils.createJavaFXIcon("archive.png"));
-        selectFolderMenuItem.setGraphic(IconUtils.createJavaFXIcon("folder.png"));
+        selectArchiveMenuItem.setGraphic(IconUtils.createJavaFXIcon(ARCHIVE_PICTURE));
+        selectFolderMenuItem.setGraphic(IconUtils.createJavaFXIcon(FOLDER_PICTURE));
     }
 
     private void initializeMetadataListView() {
         ObservableMap<String, String> metadata = metadataUtils.getMetadata();
         metadataListView.setItems(FXCollections.observableArrayList(metadata.keySet()));
 
-        metadata.addListener((MapChangeListener<String, String>) change -> {
-            metadataListView.setItems(FXCollections.observableArrayList(metadata.keySet()));
-        });
+        metadata.addListener((MapChangeListener<String, String>) change -> metadataListView.setItems(FXCollections.observableArrayList(metadata.keySet())));
 
         metadataListView.setOnMouseClicked(this::handleMetadataListDoubleClick);
     }
@@ -123,7 +134,7 @@ public class HomePageController extends BaseController {
                 fileItem.setGraphic(IconUtils.createJavaFXIcon("file.png"));
                 treeItem.getChildren().add(fileItem);
             } else {
-                TreeItem<String> nestedItem = new TreeItem<>(file.getName(), IconUtils.createJavaFXIcon("folder.png"));
+                TreeItem<String> nestedItem = new TreeItem<>(file.getName(), IconUtils.createJavaFXIcon(FOLDER_PICTURE));
                 makeTreeItem(nestedItem, file);
                 treeItem.getChildren().add(nestedItem);
             }
@@ -138,7 +149,7 @@ public class HomePageController extends BaseController {
         selectedFolder = directoryChooser.showDialog(stage);
 
         if (selectedFolder != null) {
-            TreeItem<String> folderItem = new TreeItem<>(selectedFolder.getName(), IconUtils.createJavaFXIcon("folder.png"));
+            TreeItem<String> folderItem = new TreeItem<>(selectedFolder.getName(), IconUtils.createJavaFXIcon(FOLDER_PICTURE));
             makeTreeItem(folderItem, selectedFolder);
             treeViewTable.setRoot(folderItem);
 
@@ -164,7 +175,7 @@ public class HomePageController extends BaseController {
         selectedFolder = fileChooser.showOpenDialog(stage);
 
         if (selectedFolder != null) {
-            TreeItem<String> archiveItem = new TreeItem<>(selectedFolder.getName() + " (preview)", IconUtils.createJavaFXIcon("archive.png"));
+            TreeItem<String> archiveItem = new TreeItem<>(selectedFolder.getName() + " (preview)", IconUtils.createJavaFXIcon(ARCHIVE_PICTURE));
             treeViewTable.setRoot(archiveItem);
 
             boolean hasPassword = EncryptionHandler.isPasswordProtected(selectedFolder.getAbsolutePath());
@@ -200,7 +211,7 @@ public class HomePageController extends BaseController {
         for (String line : lines) {
             String itemName = line.trim().replaceAll("[\\[\\]-]", "");
             if (line.matches("^\\s*\\[.*]$")) {
-                TreeItem<String> directoryItem = new TreeItem<>(itemName, IconUtils.createJavaFXIcon("folder.png"));
+                TreeItem<String> directoryItem = new TreeItem<>(itemName, IconUtils.createJavaFXIcon(FOLDER_PICTURE));
                 currentParent.getChildren().add(directoryItem);
                 currentParent = directoryItem;
             } else if (line.matches("^\\s*- .*")) {
@@ -229,7 +240,7 @@ public class HomePageController extends BaseController {
             FileArchive deCompressed = ArchiveHandler.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, filepath, pwdInput.getText());
 
             clearSelectedFolder();
-            showAlert(Alert.AlertType.INFORMATION, "Decompress", String.format("Successfully decompressed your archive at: \n%s", deCompressed.getROOT().getAbsolutePath()));
+            showAlert(Alert.AlertType.INFORMATION, "Decompress", "Successfully decompressed your archive at: \n" + deCompressed.getROOT().getAbsolutePath());
         } catch (InvalidObjectException ex) {
             showAlert(Alert.AlertType.ERROR, "Decompression error", "The password you provided was incorrect!");
         } catch (Exception ex) {
@@ -252,7 +263,7 @@ public class HomePageController extends BaseController {
             FileArchive compressed = ArchiveHandler.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + ".zip");
 
             clearSelectedFolder();
-            showAlert(Alert.AlertType.INFORMATION, "Compressed", String.format("Successfully compressed your archive at: \n%s", compressed.getROOT().getAbsolutePath()));
+            showAlert(Alert.AlertType.INFORMATION, "Compressed", "Successfully compressed your archive at: \n" + compressed.getROOT().getAbsolutePath());
         } catch (Exception ex) {
             showAlert(Alert.AlertType.ERROR, "Compression error", "Something went wrong during the encryption!");
         }

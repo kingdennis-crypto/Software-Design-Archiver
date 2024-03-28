@@ -3,6 +3,7 @@ package nl.vu.cs.softwaredesign.lib.handlers;
 import nl.vu.cs.softwaredesign.lib.models.KeyProperties;
 
 import javax.crypto.KeyGenerator;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,8 +13,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class KeyHandler {
-    public KeyHandler() { }
-
     /**
      * Creates a new key with the specified name.
      * @return The path to the newly created key file.
@@ -24,7 +23,7 @@ public class KeyHandler {
         Path dirPath = Paths.get(PathHandler.getUserDataPath());
 
         String keyName = "archive.key";
-        Path keyPath = Paths.get(dirPath + "/" + keyName);
+        Path keyPath = Paths.get(dirPath + File.separator + keyName);
 
         if (!Files.exists(keyPath))
             Files.createFile(keyPath);
@@ -53,7 +52,7 @@ public class KeyHandler {
         Path dirPath = Paths.get(PathHandler.getUserDataPath());
 
         String keyName = "archive.key";
-        Path keyPath = Paths.get(dirPath + "/" + keyName);
+        Path keyPath = Paths.get(dirPath + File.separator + keyName);
 
         if (!Files.exists(keyPath))
             throw new FileNotFoundException(keyPath.toString());

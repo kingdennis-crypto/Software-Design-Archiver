@@ -7,17 +7,17 @@ import java.util.*;
  * Represents an archive of files and folders and provides metadata.
  */
 public class FileArchive {
-    private final File ROOT;
-    private final Map<String, String> METADATA;
+    private final File root;
+    private final Map<String, String> metadata;
 
     public FileArchive(File root) {
-        this.ROOT = root;
-        this.METADATA = new HashMap<>();
+        this.root = root;
+        this.metadata = new HashMap<>();
     }
 
     public FileArchive(File root, Map<String, String> metadata) {
-        this.ROOT = root;
-        this.METADATA = metadata;
+        this.root = root;
+        this.metadata = metadata;
     }
 
     /**
@@ -26,11 +26,11 @@ public class FileArchive {
      * @param value The value associated with the key.
      */
     public void addMetadata(String key, String value) {
-        this.METADATA.put(key, value);
+        this.metadata.put(key, value);
     }
 
     public void addMetadata(Map<String, String> values) {
-        this.METADATA.putAll(values);
+        this.metadata.putAll(values);
     }
 
     /**
@@ -38,7 +38,7 @@ public class FileArchive {
      * @return A map containing the metadata.
      */
     public Map<String, String> getMetadata() {
-        return this.METADATA;
+        return this.metadata;
     }
 
     /**
@@ -47,7 +47,7 @@ public class FileArchive {
      * @return The value associated with the specified key, or null if the key is not present
      */
     public String getMetadataByKey(String key) {
-        return this.METADATA.get(key);
+        return this.metadata.get(key);
     }
 
     /**
@@ -55,7 +55,7 @@ public class FileArchive {
      * @return The number of files in the file archive.
      */
     public int getFileAmount() {
-        return Objects.requireNonNull(this.ROOT.listFiles()).length;
+        return Objects.requireNonNull(this.root.listFiles()).length;
     }
 
     /**
@@ -63,7 +63,7 @@ public class FileArchive {
      * @return The total size of all files in bytes.
      */
     private double getSizeInBytes() {
-        return Arrays.stream(Objects.requireNonNull(this.ROOT.listFiles()))
+        return Arrays.stream(Objects.requireNonNull(this.root.listFiles()))
                 .filter(File::isFile)
                 .mapToLong(File::length)
                 .sum();
@@ -74,7 +74,7 @@ public class FileArchive {
      * @return The root directory of the file archive.
      */
     public File getROOT() {
-        return ROOT;
+        return root;
     }
 
     /**
