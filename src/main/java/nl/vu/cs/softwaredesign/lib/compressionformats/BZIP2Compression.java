@@ -14,7 +14,7 @@ import java.io.IOException;
  * This class provides methods to compress and decompress files using GZIP compression algorithm.
  */
 @CompressionType(label = "GZIP", description = "GZip description", extensions = { ".gzip" })
-public class GZIPCompression implements ICompressionFormat {
+public class BZIP2Compression implements ICompressionFormat {
 
     /**
      * Compresses the given file archive using GZIP compression algorithm.
@@ -26,7 +26,7 @@ public class GZIPCompression implements ICompressionFormat {
      */
     @Override
     public FileArchive compress(FileArchive fileArchive, String destinationPath) throws IOException {
-        Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, org.rauschig.jarchivelib.CompressionType.GZIP);
+        Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, org.rauschig.jarchivelib.CompressionType.BZIP2);
         File file = archiver.create(fileArchive.getROOT().getName(), new File(destinationPath), fileArchive.getROOT());
 
         return new FileArchive(file);
@@ -42,7 +42,7 @@ public class GZIPCompression implements ICompressionFormat {
      */
     @Override
     public FileArchive decompress(FileArchive compressedFiles, String destinationPath) throws IOException {
-        Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, org.rauschig.jarchivelib.CompressionType.GZIP);
+        Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, org.rauschig.jarchivelib.CompressionType.BZIP2);
         archiver.extract(compressedFiles.getROOT(), new File(destinationPath));
 
         return new FileArchive(new File(destinationPath));
