@@ -124,8 +124,13 @@ public class CompressionHandler {
     public List<String> getCompressionExtensions() {
         return getAvailableCompressionTypes()
                 .stream()
-                .map(CompressionType::extensions)
-                .flatMap(Arrays::stream)
+                .map(CompressionType::extension)
                 .collect(Collectors.toList());
+    }
+
+    public String getExtensionByLabel(String label) {
+        return this.getCompressionFormatByLabel(label)
+                .getAnnotation(CompressionType.class)
+                .extension();
     }
 }
