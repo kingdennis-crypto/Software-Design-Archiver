@@ -10,6 +10,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.utils.IconUtils;
 import nl.vu.cs.softwaredesign.app.utils.MetadataUtils;
+import nl.vu.cs.softwaredesign.lib.annotations.CompressionType;
 import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.handlers.ArchiveHandler;
 import nl.vu.cs.softwaredesign.lib.handlers.CompressionHandler;
@@ -37,19 +38,9 @@ public class HomePageController extends BaseController {
     @FXML
     private CheckBox includePwdCheckbox;
     @FXML
-    private Button clearBtn;
+    private Button clearBtn, deArchiveBtn, archiveBtn, addMetadataBtn;
     @FXML
-    private Button deArchiveBtn;
-    @FXML
-    private Button archiveBtn;
-    @FXML
-    private Button addMetadataBtn;
-    @FXML
-    private MenuItem settingsMenuItem;
-    @FXML
-    private MenuItem selectFolderMenuItem;
-    @FXML
-    private MenuItem selectArchiveMenuItem;
+    private MenuItem settingsMenuItem, selectFolderMenuItem, selectArchiveMenuItem;
     @FXML
     private ListView<String> metadataListView;
 
@@ -198,6 +189,8 @@ public class HomePageController extends BaseController {
                 // Remove unnecessary metadata
                 archiveMetadata.remove("content");
                 archiveMetadata.remove("password");
+                archiveMetadata.remove("extension");
+                archiveMetadata.remove("label");
                 metadataUtils.addKeyValue(archiveMetadata);
             }
         }
@@ -229,15 +222,14 @@ public class HomePageController extends BaseController {
         }
 
         ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
-
-        Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
-
+        Map<String, String> archiveMetadata = EncryptionHandler.readMetadataFromFile(selectedFolder.getAbsolutePath());
+        Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(archiveMetadata.get("label"));
         FileArchive archive = new FileArchive(selectedFolder);
 
         try {
-            // TODO: Add way to dynamically change the extension
-            String filepath = archive.getROOT().getAbsolutePath().replaceAll(".zip", "");
-            FileArchive deCompressed = ArchiveHandler.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, filepath, pwdInput.getText());
+            String destinationPath = selectedFolder.getAbsolutePath().replaceAll(archiveMetadata.get("extension"), "");
+
+            FileArchive deCompressed = ArchiveHandler.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, destinationPath, pwdInput.getText());
 
             clearSelectedFolder();
             showAlert(Alert.AlertType.INFORMATION, "Decompress", "Successfully decompressed your archive at: \n" + deCompressed.getROOT().getAbsolutePath());
@@ -251,16 +243,19 @@ public class HomePageController extends BaseController {
     public void archiveSelection() {
         ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
         Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
+        String extension = compressionHandler.getExtensionByLabel(configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT));
 
         FileArchive archive = new FileArchive(selectedFolder);
         archive.addMetadata(metadataUtils.getMetadata());
+        archive.addMetadata("extension", extension);
+        archive.addMetadata("label", compressionFormat.getAnnotation(CompressionType.class).label());
 
         if (includePwdCheckbox.isSelected()) {
             archive.addMetadata("password", pwdInput.getText());
         }
 
         try {
-            FileArchive compressed = ArchiveHandler.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + ".zip");
+            FileArchive compressed = ArchiveHandler.insertContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, archive.getROOT().getAbsolutePath() + extension);
 
             clearSelectedFolder();
             showAlert(Alert.AlertType.INFORMATION, "Compressed", "Successfully compressed your archive at: \n" + compressed.getROOT().getAbsolutePath());

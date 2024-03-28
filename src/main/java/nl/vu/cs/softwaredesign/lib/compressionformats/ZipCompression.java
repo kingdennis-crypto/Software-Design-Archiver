@@ -12,7 +12,7 @@ import java.io.*;
  * Implementation of the {@link ICompressionFormat} interface for ZIP compression format.
  * This class provides methods to compress and decompress files using ZIP format.
  */
-@CompressionType(label = "ZIP", description = "ZIP description", extensions = { ".zip" })
+@CompressionType(label = "ZIP", description = "ZIP description", extension = ".zip")
 public class ZipCompression implements ICompressionFormat {
     /**
      * Compresses the files in the given source directory into a ZIP archive with the specified destination path.

@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface CompressionType {
     String label();
     String description();
-    String[] extensions();
+    String extension();
 }
