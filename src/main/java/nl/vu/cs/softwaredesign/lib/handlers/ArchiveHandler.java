@@ -1,9 +1,11 @@
 package nl.vu.cs.softwaredesign.lib.handlers;
 
 import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
+import nl.vu.cs.softwaredesign.lib.enumerations.Status;
 import nl.vu.cs.softwaredesign.lib.interfaces.ICompressionFormat;
 import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 import nl.vu.cs.softwaredesign.lib.models.KeyProperties;
+import nl.vu.cs.softwaredesign.lib.observers.ProgressManager;
 
 import java.io.IOException;
 import java.io.InvalidObjectException;
@@ -25,6 +27,8 @@ public class ArchiveHandler {
     public static FileArchive insertContents(ICompressionFormat format, FileArchive fileArchive, String destinationPath)
             throws IOException {
 
+        ProgressManager.getInstance().notifyListeners(Status.COMPILING, fileArchive.getROOT());
+
         FileArchive archive = format.compress(fileArchive, destinationPath);
         var files = fileArchive.generateFileRepresentation();
 
@@ -35,6 +39,8 @@ public class ArchiveHandler {
         KeyProperties keyProperties = keyHandler.getKey();
 
         EncryptionHandler.encryptFile(archive.getROOT().getAbsolutePath(), keyProperties.getSecretKey(), keyProperties.getNonce(), archive.getMetadata());
+
+        ProgressManager.getInstance().notifyListeners(Status.FINISHED, archive.getROOT());
 
         return archive;
     }
@@ -51,6 +57,9 @@ public class ArchiveHandler {
      */
     public static FileArchive extractContents(ICompressionFormat format, FileArchive fileArchive, String destinationPath,
                                               String password) throws IOException {
+        ProgressManager progressManager = ProgressManager.getInstance();
+
+        progressManager.notifyListeners(Status.COMPILING, fileArchive.getROOT());
 
         KeyHandler keyHandler = new KeyHandler();
         KeyProperties keyProperties = keyHandler.getKey();
@@ -73,6 +82,8 @@ public class ArchiveHandler {
 
         // TODO: Add delete check with exception
         fileArchive.getROOT().delete();
+
+        progressManager.notifyListeners(Status.FINISHED, deArchived.getROOT());
 
         return deArchived;
     }
