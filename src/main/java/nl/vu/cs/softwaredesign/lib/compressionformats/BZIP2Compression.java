@@ -13,7 +13,7 @@ import java.io.IOException;
  * A class implementing the GZIP compression format.
  * This class provides methods to compress and decompress files using GZIP compression algorithm.
  */
-@CompressionType(label = "GZIP", description = "GZip description", extensions = { ".gzip" })
+@CompressionType(label = "BZIP2", description = "BZIP2 description", extensions = { ".bzip2" })
 public class BZIP2Compression implements ICompressionFormat {
 
     /**
