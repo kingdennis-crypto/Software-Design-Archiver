@@ -40,7 +40,7 @@ public class HomePageController extends BaseController {
     @FXML
     private Button clearBtn, deArchiveBtn, archiveBtn, addMetadataBtn;
     @FXML
-    private MenuItem settingsMenuItem, selectFolderMenuItem, selectArchiveMenuItem;
+    private MenuItem settingsMenuItem, logsMenuItem, selectFolderMenuItem, selectArchiveMenuItem;
     @FXML
     private ListView<String> metadataListView;
 
@@ -64,6 +64,7 @@ public class HomePageController extends BaseController {
         deArchiveBtn.setGraphic(IconUtils.createJavaFXIcon("dearchive.png"));
 
         settingsMenuItem.setGraphic(IconUtils.createJavaFXIcon("settings.png"));
+        logsMenuItem.setGraphic(IconUtils.createJavaFXIcon("logs.png"));
         selectArchiveMenuItem.setGraphic(IconUtils.createJavaFXIcon(ARCHIVE_PICTURE));
         selectFolderMenuItem.setGraphic(IconUtils.createJavaFXIcon(FOLDER_PICTURE));
     }
@@ -90,6 +91,10 @@ public class HomePageController extends BaseController {
 
     public void openSettingsPage() {
         openNewWindow("settings-view.fxml");
+    }
+
+    public void openLogsPage() {
+        openNewWindow("log-view.fxml");
     }
 
     public void openMetadataPage() {

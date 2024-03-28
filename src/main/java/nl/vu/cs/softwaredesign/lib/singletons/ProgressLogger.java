@@ -4,12 +4,14 @@ import nl.vu.cs.softwaredesign.lib.enumerations.Status;
 import nl.vu.cs.softwaredesign.lib.handlers.PathHandler;
 import nl.vu.cs.softwaredesign.lib.interfaces.IProgressListener;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -46,6 +48,25 @@ public class ProgressLogger implements IProgressListener {
         //  on multiple threads to make sure there aren't multiple instances of the file
         if (instance == null) instance = new ProgressLogger();
         return instance;
+    }
+
+    // Read the last N lines
+    public List<String> readLogFile(int numLines) {
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+            String line;
+
+            while ((line = reader.readLine()) != null)
+                lines.add(line);
+
+            int endIndex = Math.min(lines.size(), numLines);
+            lines = lines.subList(lines.size() - endIndex, lines.size());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return lines;
     }
 
     /**

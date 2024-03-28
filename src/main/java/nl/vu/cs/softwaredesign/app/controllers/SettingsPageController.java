@@ -26,9 +26,6 @@ public class SettingsPageController extends BaseController {
     private ComboBox<String> compressionFormatCombo;
 
     @FXML
-    private TextField excludeFilesInput;
-
-    @FXML
     private Text outputDirTxt;
 
     private static final String EMPTY_OUTPUT = "No_default_output_selected!";
@@ -47,9 +44,6 @@ public class SettingsPageController extends BaseController {
     private void setDefaultSettings() {
         this.compressionFormatCombo.setItems(getCompressionFormats());
         this.compressionFormatCombo.getSelectionModel().select(0);
-
-        String emptyExclude = "No file types to exclude";
-        this.excludeFilesInput.setPromptText(emptyExclude);
         this.outputDirTxt.setText(EMPTY_OUTPUT);
     }
 
@@ -69,14 +63,10 @@ public class SettingsPageController extends BaseController {
      */
     private void setSettingsValues() {
         String format = configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT);
-        String exclude = configurationHandler.getProperty(SettingsValue.EXCLUDE_FILES);
         String output = configurationHandler.getProperty(SettingsValue.DEFAULT_OUTPUT);
 
         if (format != null)
             this.compressionFormatCombo.setValue(format);
-
-        if (exclude != null)
-            this.excludeFilesInput.setText(exclude);
 
         if (output != null)
             this.outputDirTxt.setText(output);
@@ -87,9 +77,6 @@ public class SettingsPageController extends BaseController {
      */
     public void saveProperties() {
         configurationHandler.setProperty(SettingsValue.COMPRESSION_FORMAT, compressionFormatCombo.getValue());
-
-        if (!excludeFilesInput.getText().isEmpty())
-            configurationHandler.setProperty(SettingsValue.EXCLUDE_FILES, excludeFilesInput.getText());
 
         if (!outputDirTxt.getText().equals(EMPTY_OUTPUT))
             configurationHandler.setProperty(SettingsValue.DEFAULT_OUTPUT, outputDirTxt.getText());
