@@ -8,14 +8,14 @@ import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 import java.io.File;
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 /**
  * A class implementing the GZIP compression format.
  * This class provides methods to compress and decompress files using GZIP compression algorithm.
  */
 @CompressionType(label = "GZIP", description = "GZIP description", extension = ".tar.gz")
-public class GZIPCompression implements ICompressionFormat {
-
+public class GZIPCompression extends Compression implements ICompressionFormat {
     /**
      * Compresses the given file archive using GZIP compression algorithm.
      *
@@ -27,7 +27,7 @@ public class GZIPCompression implements ICompressionFormat {
     @Override
     public FileArchive compress(FileArchive fileArchive, String destinationPath) throws IOException {
         Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, org.rauschig.jarchivelib.CompressionType.GZIP);
-        File file = archiver.create(fileArchive.getROOT().getName(), new File(destinationPath), fileArchive.getROOT());
+        File file = archiver.create(fileArchive.getROOT().getName(), new File(super.removeLastPathSection(destinationPath)), fileArchive.getROOT());
 
         return new FileArchive(file);
     }
