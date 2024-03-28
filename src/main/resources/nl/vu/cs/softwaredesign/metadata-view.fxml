@@ -12,22 +12,22 @@
    <children>
       <VBox layoutX="100.0" layoutY="88.0" prefWidth="300.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefWidth="100.0">
+            <VBox prefWidth="100.0" style="-fx-background-color: white;">
                <children>
-                  <Label text="Key" />
-                  <TextField fx:id="keyInput" />
+                  <Label style="-fx-text-fill: #0077b3;" text="Key" />
+                  <TextField fx:id="keyInput" style="-fx-border-color: black; -fx-border-radius: 5;" />
                </children>
             </VBox>
             <VBox prefWidth="100.0">
                <children>
-                  <Label text="Value" />
-                  <TextField fx:id="valueInput" />
+                  <Label style="-fx-text-fill: #0077b3;" text="Value" />
+                  <TextField fx:id="valueInput" style="-fx-border-color: black; -fx-border-radius: 5;" />
                </children>
             </VBox>
             <HBox prefWidth="200.0" spacing="5.0">
                <children>
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#closeMetadataWindow" text="Close" HBox.hgrow="ALWAYS" />
-                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#addMetadata" text="Add" HBox.hgrow="ALWAYS" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#closeMetadataWindow" style="-fx-background-color: #0077b3; -fx-text-fill: white;" text="Close" HBox.hgrow="ALWAYS" />
+                  <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#addMetadata" style="-fx-background-color: #0077b3; -fx-text-fill: white;" text="Add" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </children>

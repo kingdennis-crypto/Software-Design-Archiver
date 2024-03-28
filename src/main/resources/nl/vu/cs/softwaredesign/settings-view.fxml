@@ -12,12 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
 <Pane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.vu.cs.softwaredesign.app.controllers.SettingsPageController">
    <children>
-      <VBox>
+      <VBox style="-fx-background-color: white;">
          <children>
-            <GridPane>
+            <GridPane style="-fx-background-color: white;">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="277.0" minWidth="10.0" prefWidth="134.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.0" minWidth="10.0" prefWidth="247.0" />
@@ -30,23 +29,23 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Compression format" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exclude files" GridPane.rowIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select default output" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                  <ComboBox fx:id="compressionFormatCombo" maxWidth="1.7976931348623157E308" prefWidth="150.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                  <TextField fx:id="excludeFilesInput" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Button fx:id="defaultOutputBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#selectOutputDir" text="Select output" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Default output" GridPane.rowIndex="3" />
+                  <Text fill="#0077b3" strokeType="OUTSIDE" strokeWidth="0.0" text="Compression format" />
+                  <Text fill="#0077b3" strokeType="OUTSIDE" strokeWidth="0.0" text="Exclude files" GridPane.rowIndex="1" />
+                  <Text fill="#0077b3" strokeType="OUTSIDE" strokeWidth="0.0" text="Select default output" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="compressionFormatCombo" maxWidth="1.7976931348623157E308" prefWidth="150.0" style="-fx-border-color: black; -fx-background-color: white; -fx-border-radius: 5;" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                  <TextField fx:id="excludeFilesInput" style="-fx-border-radius: 5; -fx-background-color: white; -fx-border-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="defaultOutputBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#selectOutputDir" style="-fx-background-color: #0077b3;" text="Select output" textFill="WHITE" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
+                  <Text fill="#0077b3" strokeType="OUTSIDE" strokeWidth="0.0" text="Default output" GridPane.rowIndex="3" />
                   <Text fx:id="outputDirTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="OUTPUT" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reset encryption key" GridPane.rowIndex="4" />
-                  <Button fx:id="defaultOutputBtn2" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#resetEncryptionKey" text="Reset" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Text fill="#0077b3" strokeType="OUTSIDE" strokeWidth="0.0" text="Reset encryption key" GridPane.rowIndex="4" />
+                  <Button fx:id="defaultOutputBtn2" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#resetEncryptionKey" style="-fx-background-color: #0077b3;" text="Reset" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: white;">
               <buttons>
-                <Button defaultButton="true" mnemonicParsing="false" onMouseClicked="#saveProperties" text="Save" />
-                  <Button mnemonicParsing="false" onMouseClicked="#resetProperties" text="Reset" />
-                  <Button cancelButton="true" mnemonicParsing="false" onMouseClicked="#cancelSettingsView" text="Cancel" />
+                <Button defaultButton="true" mnemonicParsing="false" onMouseClicked="#saveProperties" style="-fx-background-color: #0077b3;" text="Save" textFill="WHITE" />
+                  <Button mnemonicParsing="false" onMouseClicked="#resetProperties" style="-fx-background-color: #0077b3;" text="Reset" textFill="WHITE" />
+                  <Button cancelButton="true" mnemonicParsing="false" onMouseClicked="#cancelSettingsView" style="-fx-background-color: #0077b3;" text="Cancel" textFill="WHITE" />
               </buttons>
             </ButtonBar>
          </children>
