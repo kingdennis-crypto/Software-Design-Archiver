@@ -17,6 +17,7 @@ import nl.vu.cs.softwaredesign.lib.handlers.KeyHandler;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SettingsPageController extends BaseController {
@@ -26,9 +27,10 @@ public class SettingsPageController extends BaseController {
     private ComboBox<String> compressionFormatCombo;
 
     @FXML
-    private Text outputDirTxt;
+    private Text compressOutputTxt, decompressOutputTxt;
 
-    private static final String EMPTY_OUTPUT = "No_default_output_selected!";
+    private static final String EMPTY_COMPRESS_OUTPUT = "No default compress output selected!";
+    private static final String EMPTY_DECOMPRESS_OUTPUT = "No default decompress output selected!";
 
     /**
      * Sets upt the configuration handler and populates all fields with settings if they exists
@@ -44,7 +46,9 @@ public class SettingsPageController extends BaseController {
     private void setDefaultSettings() {
         this.compressionFormatCombo.setItems(getCompressionFormats());
         this.compressionFormatCombo.getSelectionModel().select(0);
-        this.outputDirTxt.setText(EMPTY_OUTPUT);
+
+        compressOutputTxt.setText(EMPTY_COMPRESS_OUTPUT);
+        decompressOutputTxt.setText(EMPTY_DECOMPRESS_OUTPUT);
     }
 
     /**
@@ -63,13 +67,51 @@ public class SettingsPageController extends BaseController {
      */
     private void setSettingsValues() {
         String format = configurationHandler.getProperty(SettingsValue.COMPRESSION_FORMAT);
-        String output = configurationHandler.getProperty(SettingsValue.DEFAULT_OUTPUT);
+        String compressOut = configurationHandler.getProperty(SettingsValue.DEFAULT_COMPRESS_OUTPUT);
+        String decompressOut = configurationHandler.getProperty(SettingsValue.DEFAULT_DECOMPRESS_OUTPUT);
 
         if (format != null)
             this.compressionFormatCombo.setValue(format);
 
-        if (output != null)
-            this.outputDirTxt.setText(output);
+        if (compressOut != null)
+            this.compressOutputTxt.setText(compressOut);
+
+        if (decompressOut != null)
+            this.decompressOutputTxt.setText(decompressOut);
+    }
+
+    public void clearCompressOutput() {
+        configurationHandler.clearProperty(SettingsValue.DEFAULT_COMPRESS_OUTPUT);
+        compressOutputTxt.setText(EMPTY_COMPRESS_OUTPUT);
+    }
+
+    public void clearDecompressOutput() {
+        configurationHandler.clearProperty(SettingsValue.DEFAULT_DECOMPRESS_OUTPUT);
+        decompressOutputTxt.setText(EMPTY_DECOMPRESS_OUTPUT);
+    }
+
+    public void chooseCompressOutput() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select default compress output");
+
+        File outputFolder = directoryChooser.showDialog(stage);
+
+        if (outputFolder != null) {
+            configurationHandler.setProperty(SettingsValue.DEFAULT_COMPRESS_OUTPUT, outputFolder.getAbsolutePath());
+            compressOutputTxt.setText(outputFolder.getAbsolutePath());
+        }
+    }
+
+    public void chooseDecompressOutput() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select default decompress output");
+
+        File outputFolder = directoryChooser.showDialog(stage);
+
+        if (outputFolder != null) {
+            configurationHandler.setProperty(SettingsValue.DEFAULT_DECOMPRESS_OUTPUT, outputFolder.getAbsolutePath());
+            decompressOutputTxt.setText(outputFolder.getAbsolutePath());
+        }
     }
 
     /**
@@ -77,9 +119,6 @@ public class SettingsPageController extends BaseController {
      */
     public void saveProperties() {
         configurationHandler.setProperty(SettingsValue.COMPRESSION_FORMAT, compressionFormatCombo.getValue());
-
-        if (!outputDirTxt.getText().equals(EMPTY_OUTPUT))
-            configurationHandler.setProperty(SettingsValue.DEFAULT_OUTPUT, outputDirTxt.getText());
 
         try {
             configurationHandler.saveProperties();
@@ -99,20 +138,6 @@ public class SettingsPageController extends BaseController {
             setSettingsValues();
         } catch (IOException ex) {
             showAlert(Alert.AlertType.ERROR, "Resetted properties", "Something went wrong trying to reset the properties");
-        }
-    }
-
-    /**
-     * Opens a directory chooser to allow the user to select an output directory for the archive.
-     */
-    public void selectOutputDir() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Select folder");
-
-        File outputFolder = directoryChooser.showDialog(stage);
-
-        if (outputFolder != null) {
-            outputDirTxt.setText(outputFolder.getAbsolutePath());
         }
     }
 

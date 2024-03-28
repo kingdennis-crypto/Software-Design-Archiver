@@ -72,6 +72,10 @@ public class ConfigurationHandler {
         properties.setProperty(key.label, value);
     }
 
+    public void clearProperty(SettingsValue key) {
+        properties.remove(key.label);
+    }
+
     /**
      * Saves the current configuration properties to the configuration file.
      */

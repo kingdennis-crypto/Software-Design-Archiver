@@ -29,6 +29,13 @@ public class ArchiveHandler {
 
         ProgressManager.getInstance().notifyListeners(Status.COMPILING, fileArchive.getROOT());
 
+        if (ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_COMPRESS_OUTPUT) != null) {
+            String[] archivePath = destinationPath.split("/");
+            String archiveName = archivePath[archivePath.length - 1];
+
+            destinationPath = ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_COMPRESS_OUTPUT) + "/" + archiveName;
+        }
+
         FileArchive archive = format.compress(fileArchive, destinationPath);
         var files = fileArchive.generateFileRepresentation();
 
@@ -59,6 +66,13 @@ public class ArchiveHandler {
                                               String password) throws IOException {
         ProgressManager progressManager = ProgressManager.getInstance();
 
+        if (ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_DECOMPRESS_OUTPUT) != null) {
+            String[] archivePath = destinationPath.split("/");
+            String archiveName = archivePath[archivePath.length - 1];
+
+            destinationPath = ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_DECOMPRESS_OUTPUT) + "/" + archiveName;
+        }
+
         progressManager.notifyListeners(Status.COMPILING, fileArchive.getROOT());
 
         KeyHandler keyHandler = new KeyHandler();
@@ -76,9 +90,7 @@ public class ArchiveHandler {
 
         EncryptionHandler.decryptFile(fileArchive.getROOT().getAbsolutePath(), keyProperties.getSecretKey(), keyProperties.getNonce());
 
-        String defaultDestination = ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_OUTPUT);
-
-        FileArchive deArchived = format.decompress(fileArchive, defaultDestination == null ? destinationPath : defaultDestination);
+        FileArchive deArchived = format.decompress(fileArchive, destinationPath);
 
         // TODO: Add delete check with exception
         fileArchive.getROOT().delete();
