@@ -32,7 +32,7 @@ public class CompressionHandler {
 
                     try {
                         // Load the class
-                        Class<?> classObj = Class.forName("nl.vu.cs.softwaredesign.lib.CompressionFormats." + className);
+                        Class<?> classObj = Class.forName("nl.vu.cs.softwaredesign.lib.compressionformats." + className);
 
                         // Check if the class has a CompressionType annotation
                         if (classObj.isAnnotationPresent(CompressionType.class)) {
@@ -68,7 +68,7 @@ public class CompressionHandler {
                     try {
                         @SuppressWarnings("unchecked")
                         Class<ICompressionFormat> classObj =
-                                (Class<ICompressionFormat>) Class.forName("nl.vu.cs.softwaredesign.lib.CompressionFormats." + className);
+                                (Class<ICompressionFormat>) Class.forName("nl.vu.cs.softwaredesign.lib.compressionformats." + className);
 
                         classes.add(classObj);
                     } catch (ClassNotFoundException ex) {
