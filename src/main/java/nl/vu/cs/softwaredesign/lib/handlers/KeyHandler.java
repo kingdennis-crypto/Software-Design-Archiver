@@ -15,6 +15,7 @@ import java.security.SecureRandom;
 public class KeyHandler {
     /**
      * Creates a new key with the specified name.
+     *
      * @return The path to the newly created key file.
      * @throws IOException If an I/O error occurs.
      * @throws NoSuchAlgorithmException If the specified cryptographic algorithm is not available.
@@ -45,6 +46,7 @@ public class KeyHandler {
 
     /**
      * Retrieves the {@link KeyProperties} for the specified key name.
+     *
      * @return The {@link KeyProperties} containing the key's secret and nonce.
      * @throws IOException If an I/O error occurs.
      */
@@ -75,6 +77,7 @@ public class KeyHandler {
 
     /**
      * Generates a random nonce for the IV part of the key.
+     *
      * @return The generated nonce.
      */
     private byte[] getRandomNonce() {

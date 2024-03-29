@@ -13,6 +13,7 @@ public class EncryptionHandler {
 
     /**
      * Encrypts a file using AES/GCM/NoPadding algorithm and stores the metadata in plain text.
+     *
      * @param path The path to the file to be encrypted.
      * @param secret The secret key used for encryption.
      * @param iv The initialization vector for encryption.
@@ -64,6 +65,7 @@ public class EncryptionHandler {
 
     /**
      * Decrypts a file encrypted with AES/GCM/NoPadding algorithm and extracts the associated metadata.
+     *
      * The decrypted content will be written back to the input file
      * @param path The path to the file to be decrypted.
      * @param secret The secret key used for decryption.
@@ -117,6 +119,7 @@ public class EncryptionHandler {
 
     /**
      * Reads metadata from a file without decrypting its content.
+     *
      * @param path The path to the encrypted file.
      * @return A map containing the metadata extracted from the file.
      */
@@ -130,6 +133,12 @@ public class EncryptionHandler {
         }
     }
 
+    /**
+     * Checks if the file at the specified path is password-protected.
+     *
+     * @param path  The path to the file.
+     * @return      True if the file is password-protected, false otherwise.
+     */
     public static boolean isPasswordProtected(String path) {
         return EncryptionHandler.readMetadataFromFile(path).containsKey("password");
     }

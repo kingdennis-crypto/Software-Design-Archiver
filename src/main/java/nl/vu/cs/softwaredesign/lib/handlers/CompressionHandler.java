@@ -84,7 +84,7 @@ public class CompressionHandler {
     /**
      * Retrieves the compression format class by its label.
      * @param label The label of the compression format.
-     * @return The compression format class corresponding to the label, or null if not found.
+     * @return      The compression format class corresponding to the label, or null if not found.
      */
     public Class<ICompressionFormat> getCompressionFormatByLabel(String label) {
         List<Class<ICompressionFormat>> compressions = this.getAllCompressionFormats();
@@ -128,6 +128,12 @@ public class CompressionHandler {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves the file extension associated with the compression format label.
+     *
+     * @param label The label of the compression format.
+     * @return      The file extension related to the compression format
+     */
     public String getExtensionByLabel(String label) {
         return this.getCompressionFormatByLabel(label)
                 .getAnnotation(CompressionType.class)

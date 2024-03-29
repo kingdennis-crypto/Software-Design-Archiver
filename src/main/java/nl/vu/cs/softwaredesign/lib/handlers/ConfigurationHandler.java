@@ -44,6 +44,7 @@ public class ConfigurationHandler {
 
     /**
      * Gets the singleton instance of the ConfigurationHandler.
+     *
      * @return The ConfigurationHandler instance.
      */
     public static ConfigurationHandler getInstance() {
@@ -56,6 +57,7 @@ public class ConfigurationHandler {
 
     /**
      * Retrieves the value associated with the specified key from the configuration.
+     *
      * @param key The key for which to retrieve the value.
      * @return The value associated with the key, or null if the key is not found.
      */
@@ -65,6 +67,7 @@ public class ConfigurationHandler {
 
     /**
      * Sets a value in the configuration with the specified key.
+     *
      * @param key The key for the property.
      * @param value The value to be associated with the key.
      */
@@ -72,6 +75,11 @@ public class ConfigurationHandler {
         properties.setProperty(key.label, value);
     }
 
+    /**
+     * Removes the property associated with the specified key.
+     *
+     * @param key The key of the property to be removed.
+     */
     public void clearProperty(SettingsValue key) {
         properties.remove(key.label);
     }

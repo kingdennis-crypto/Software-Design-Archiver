@@ -5,6 +5,12 @@ import java.util.stream.IntStream;
 public abstract class Compression {
     public Compression() {}
 
+    /**
+     * Removes the last section of a path.
+     *
+     * @param path  The input path.
+     * @return      The path with the last section removed.
+     */
     protected String removeLastPathSection(String path) {
         int lastIndex = IntStream.range(0, path.length())
                 .filter(i -> path.charAt(i) == '/')

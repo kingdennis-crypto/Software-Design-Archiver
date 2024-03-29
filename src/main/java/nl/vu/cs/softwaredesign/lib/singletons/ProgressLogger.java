@@ -50,7 +50,12 @@ public class ProgressLogger implements IProgressListener {
         return instance;
     }
 
-    // Read the last N lines
+    /**
+     * Reads the last N lines from the logfile.
+     *
+     * @param numLines  The number of lines to read.
+     * @return          A list containing the last N lines from the logfile.
+     */
     public List<String> readLogFile(int numLines) {
         List<String> lines = new ArrayList<>();
 
@@ -71,6 +76,7 @@ public class ProgressLogger implements IProgressListener {
 
     /**
      * Updates the progress status for the existing file and writes it to the logfile.
+     *
      * @param status The status to be logged.
      * @param file The existing file to log the status to.
      */
@@ -86,13 +92,6 @@ public class ProgressLogger implements IProgressListener {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-    }
-
-    /**
-     * Deletes the logfile.
-     */
-    public void deleteLogFile() {
-        logFile.delete();
     }
 }
 

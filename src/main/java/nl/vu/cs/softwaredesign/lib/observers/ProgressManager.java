@@ -23,10 +23,21 @@ public class ProgressManager {
         return instance;
     }
 
+    /**
+     * Adds a progress listener to be notified of status updates.
+     *
+     * @param listener The progress listener to add.
+     */
     public void addListener(IProgressListener listener) {
         listeners.add(listener);
     }
 
+    /**
+     * Notifies all registered listeners of a status update.
+     *
+     * @param status    The status update.
+     * @param archive   The file archive associated with the status update.
+     */
     public void notifyListeners(Status status, File archive) {
         listeners.forEach(listener -> listener.update(status, archive));
     }

@@ -92,7 +92,6 @@ public class ArchiveHandler {
 
         FileArchive deArchived = format.decompress(fileArchive, destinationPath);
 
-        // TODO: Add delete check with exception
         fileArchive.getROOT().delete();
 
         progressManager.notifyListeners(Status.FINISHED, deArchived.getROOT());
