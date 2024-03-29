@@ -8,7 +8,6 @@ import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 import java.io.File;
 import java.io.IOException;
-import java.util.stream.IntStream;
 
 /**
  * A class implementing the GZIP compression format.

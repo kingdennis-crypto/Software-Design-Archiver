@@ -26,26 +26,6 @@ public abstract class BaseController {
     }
 
     /**
-     * Switches to a new scene specified by the FXML file.
-     * @param fxmlPath The path to the FXML file for the new scene.
-     */
-    protected void switchScene(String fxmlPath) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-
-            BaseController newController = loader.getController();
-            newController.setStage(stage);
-
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
      * Opens a new window with the specified FXML file.
      * @param fxmlFileName The filename of the FXML file for the new window.
      */
@@ -96,19 +76,6 @@ public abstract class BaseController {
      */
     protected void showAlert(String title, String message) {
         this.showAlert(Alert.AlertType.INFORMATION, title, message);
-    }
-
-    /**
-     * Displays an information confirmation dialog.
-     * @param title     The title of the confirmation dialog.
-     * @param message   The message to display in the confirmation dialog.
-     * @param yesLabel  The label for the "Yes" button.
-     * @param noLabel   The label for the "No" button.
-     * @param yesAction The action for when the user clicks "Yes".
-     * @param noAction  The action for when the user clicks "No".
-     */
-    protected void showConfirmationDialog(String title, String message, String yesLabel, String noLabel, Runnable yesAction, Runnable noAction) {
-        this.showConfirmationDialog(Alert.AlertType.CONFIRMATION, title, message, yesLabel, noLabel, yesAction, noAction);
     }
 
     /**

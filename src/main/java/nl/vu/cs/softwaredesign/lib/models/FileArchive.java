@@ -48,17 +48,6 @@ public class FileArchive {
     }
 
     /**
-     * Gets the total size of all files in the file archive in bytes.
-     * @return The total size of all files in bytes.
-     */
-    private double getSizeInBytes() {
-        return Arrays.stream(Objects.requireNonNull(this.root.listFiles()))
-                .filter(File::isFile)
-                .mapToLong(File::length)
-                .sum();
-    }
-
-    /**
      * Gets the root directory of the file archive.
      * @return The root directory of the file archive.
      */
@@ -116,10 +105,6 @@ public class FileArchive {
      * @return      The indentation string.
      */
     private String getIndent(int depth) {
-        StringBuilder indent = new StringBuilder();
-        for (int i = 0; i < depth; i++) {
-            indent.append(" ");
-        }
-        return indent.toString();
+        return " ".repeat(Math.max(0, depth));
     }
 }

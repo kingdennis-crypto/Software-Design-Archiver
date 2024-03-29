@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class MetadataUtils {
     private static MetadataUtils instance;
-    private ObservableMap<String, String> metadata;
+    private final ObservableMap<String, String> metadata;
     private Map.Entry<String, String> selectedEntry;
 
     private MetadataUtils() {
@@ -49,9 +49,5 @@ public class MetadataUtils {
 
     public Map.Entry<String, String> getSelectedEntry() {
         return this.selectedEntry;
-    }
-
-    public void clearSelectedEntry() {
-        this.selectedEntry = null;
     }
 }

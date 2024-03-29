@@ -30,6 +30,10 @@ import java.util.stream.Collectors;
 public class HomePageController extends BaseController {
     private static final String ARCHIVE_PICTURE = "archive.png";
     private static final String FOLDER_PICTURE = "folder.png";
+    private static final String LABEL_KEY = "label";
+    private static final String EXTENSION_KEY = "extension";
+    private static final String CONTENT_KEY = "content";
+    private static final String PASSWORD_KEY = "password";
 
     @FXML
     private TreeView<String> treeViewTable;
@@ -38,9 +42,21 @@ public class HomePageController extends BaseController {
     @FXML
     private CheckBox includePwdCheckbox;
     @FXML
-    private Button clearBtn, deArchiveBtn, archiveBtn, addMetadataBtn;
+    private Button clearBtn;
     @FXML
-    private MenuItem settingsMenuItem, logsMenuItem, selectFolderMenuItem, selectArchiveMenuItem;
+    private Button deArchiveBtn;
+    @FXML
+    private Button archiveBtn;
+    @FXML
+    private Button addMetadataBtn;
+    @FXML
+    private MenuItem settingsMenuItem;
+    @FXML
+    private MenuItem logsMenuItem;
+    @FXML
+    private MenuItem selectFolderMenuItem;
+    @FXML
+    private MenuItem selectArchiveMenuItem;
     @FXML
     private ListView<String> metadataListView;
 
@@ -189,13 +205,13 @@ public class HomePageController extends BaseController {
             Map<String, String> archiveMetadata = EncryptionHandler.readMetadataFromFile(selectedFolder.getAbsolutePath());
 
             if (archiveMetadata != null) {
-                populateTreeViewFromMetadata(archiveMetadata.get("content"), archiveItem);
+                populateTreeViewFromMetadata(archiveMetadata.get(CONTENT_KEY), archiveItem);
 
                 // Remove unnecessary metadata
-                archiveMetadata.remove("content");
-                archiveMetadata.remove("password");
-                archiveMetadata.remove("extension");
-                archiveMetadata.remove("label");
+                archiveMetadata.remove(CONTENT_KEY);
+                archiveMetadata.remove(PASSWORD_KEY);
+                archiveMetadata.remove(EXTENSION_KEY);
+                archiveMetadata.remove(LABEL_KEY);
                 metadataUtils.addKeyValue(archiveMetadata);
             }
         }
@@ -226,13 +242,12 @@ public class HomePageController extends BaseController {
             return;
         }
 
-        ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
         Map<String, String> archiveMetadata = EncryptionHandler.readMetadataFromFile(selectedFolder.getAbsolutePath());
-        Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(archiveMetadata.get("label"));
+        Class<ICompressionFormat> compressionFormat = compressionHandler.getCompressionFormatByLabel(archiveMetadata.get(LABEL_KEY));
         FileArchive archive = new FileArchive(selectedFolder);
 
         try {
-            String destinationPath = selectedFolder.getAbsolutePath().replaceAll(archiveMetadata.get("extension"), "");
+            String destinationPath = selectedFolder.getAbsolutePath().replaceAll(archiveMetadata.get(EXTENSION_KEY), "");
 
             FileArchive deCompressed = ArchiveHandler.extractContents(compressionFormat.getDeclaredConstructor().newInstance(), archive, destinationPath, pwdInput.getText());
 
@@ -252,11 +267,11 @@ public class HomePageController extends BaseController {
 
         FileArchive archive = new FileArchive(selectedFolder);
         archive.addMetadata(metadataUtils.getMetadata());
-        archive.addMetadata("extension", extension);
-        archive.addMetadata("label", compressionFormat.getAnnotation(CompressionType.class).label());
+        archive.addMetadata(EXTENSION_KEY, extension);
+        archive.addMetadata(LABEL_KEY, compressionFormat.getAnnotation(CompressionType.class).label());
 
         if (includePwdCheckbox.isSelected()) {
-            archive.addMetadata("password", pwdInput.getText());
+            archive.addMetadata(PASSWORD_KEY, pwdInput.getText());
         }
 
         try {

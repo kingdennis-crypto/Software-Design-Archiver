@@ -3,8 +3,6 @@ package nl.vu.cs.softwaredesign.lib.compressionformats;
 import java.util.stream.IntStream;
 
 public abstract class Compression {
-    public Compression() {}
-
     /**
      * Removes the last section of a path.
      *
