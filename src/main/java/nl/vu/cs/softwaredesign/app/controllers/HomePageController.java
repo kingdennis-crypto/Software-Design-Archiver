@@ -10,6 +10,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import nl.vu.cs.softwaredesign.app.utils.IconUtils;
 import nl.vu.cs.softwaredesign.app.utils.MetadataUtils;
+import nl.vu.cs.softwaredesign.app.utils.SelectedFileUtils;
 import nl.vu.cs.softwaredesign.lib.annotations.CompressionType;
 import nl.vu.cs.softwaredesign.lib.enumerations.SettingsValue;
 import nl.vu.cs.softwaredesign.lib.handlers.ArchiveHandler;
@@ -38,7 +39,7 @@ public class HomePageController extends BaseController {
     @FXML
     private CheckBox includePwdCheckbox;
     @FXML
-    private Button clearBtn, deArchiveBtn, archiveBtn, addMetadataBtn;
+    private Button clearBtn, deArchiveBtn, archiveBtn, addMetadataBtn, generateReportBtn;
     @FXML
     private MenuItem settingsMenuItem, logsMenuItem, selectFolderMenuItem, selectArchiveMenuItem;
     @FXML
@@ -101,8 +102,14 @@ public class HomePageController extends BaseController {
         openNewWindow("metadata-view.fxml");
     }
 
+    public void openReportPage() {
+        openNewWindow("report-view.fxml");
+    }
+
     public void clearSelectedFolder() {
         selectedFolder = null;
+        SelectedFileUtils.getInstance().setSelectedFile(null);
+
         TreeItem<String> rootItem = new TreeItem<>("No folder chosen");
         rootItem.setExpanded(true);
         treeViewTable.setRoot(rootItem);
@@ -111,6 +118,8 @@ public class HomePageController extends BaseController {
         includePwdCheckbox.setDisable(true);
 
         pwdInput.clear();
+
+        generateReportBtn.setDisable(true);
 
         deArchiveBtn.setDisable(true);
         archiveBtn.setDisable(true);
@@ -143,11 +152,14 @@ public class HomePageController extends BaseController {
         directoryChooser.setTitle("Select folder");
 
         selectedFolder = directoryChooser.showDialog(stage);
+        SelectedFileUtils.getInstance().setSelectedFile(selectedFolder);
 
         if (selectedFolder != null) {
             TreeItem<String> folderItem = new TreeItem<>(selectedFolder.getName(), IconUtils.createJavaFXIcon(FOLDER_PICTURE));
             makeTreeItem(folderItem, selectedFolder);
             treeViewTable.setRoot(folderItem);
+
+            generateReportBtn.setDisable(false);
 
             clearBtn.setDisable(false);
             archiveBtn.setDisable(false);
@@ -169,6 +181,7 @@ public class HomePageController extends BaseController {
         fileChooser.getExtensionFilters().add(filter);
 
         selectedFolder = fileChooser.showOpenDialog(stage);
+        SelectedFileUtils.getInstance().setSelectedFile(selectedFolder);
 
         if (selectedFolder != null) {
             TreeItem<String> archiveItem = new TreeItem<>(selectedFolder.getName() + " (preview)", IconUtils.createJavaFXIcon(ARCHIVE_PICTURE));
@@ -178,6 +191,8 @@ public class HomePageController extends BaseController {
 
             includePwdCheckbox.setDisable(true);
             includePwdCheckbox.setSelected(hasPassword);
+
+            generateReportBtn.setDisable(false);
 
             clearBtn.setDisable(false);
             archiveBtn.setDisable(true);
@@ -202,7 +217,7 @@ public class HomePageController extends BaseController {
     }
 
     private void populateTreeViewFromMetadata(String metadataString, TreeItem<String> parentItem) {
-        String[] lines = metadataString.split("\n");
+        String[] lines = metadataString.split(System.lineSeparator());
 
         TreeItem<String> currentParent = parentItem;
 

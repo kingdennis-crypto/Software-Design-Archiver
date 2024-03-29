@@ -58,6 +58,11 @@
                   <Insets />
                </VBox.margin>
             </VBox>
+            <Button fx:id="generateReportBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#openReportPage" style="-fx-background-color: #0077b3; -fx-text-fill: #FFFF;" text="Generate report">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
             <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                <children>
                   <CheckBox fx:id="includePwdCheckbox" mnemonicParsing="false" style="-fx-text-fill: #0077b3;" text="password" />

@@ -92,7 +92,7 @@ public class FileArchive {
                     .append("[")
                     .append(directory.getName())
                     .append("]")
-                    .append("\n");
+                    .append(System.lineSeparator());
 
             File[] files = directory.listFiles();
             if (files != null) {
@@ -105,7 +105,7 @@ public class FileArchive {
                     .append(getIndent(depth))
                     .append("- ")
                     .append(directory.getName())
-                    .append("\n");
+                    .append(System.lineSeparator());
         }
     }
 
