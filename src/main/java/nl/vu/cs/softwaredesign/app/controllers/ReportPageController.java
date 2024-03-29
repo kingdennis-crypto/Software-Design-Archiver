@@ -91,7 +91,7 @@ public class ReportPageController extends BaseController {
             if (line.startsWith("[") && line.endsWith("]"))
                 continue;
 
-            String filename = line.replaceAll("-", "").trim();
+            String filename = line.replace("-", "").trim();
 
             if (!filename.isEmpty()) {
                 String extension = "." + getFileExtension(filename);
