@@ -5,6 +5,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import nl.vu.cs.softwaredesign.app.utils.SelectedFileUtils;
 import nl.vu.cs.softwaredesign.lib.handlers.CompressionHandler;
 import nl.vu.cs.softwaredesign.lib.handlers.EncryptionHandler;
@@ -17,6 +18,8 @@ import java.util.Map;
 public class ReportPageController extends BaseController {
     @FXML
     public BarChart<String, Number> fileBarChart;
+    @FXML
+    public Label totalFilesLbl;
 
     @FXML
     public void initialize() {
@@ -33,9 +36,13 @@ public class ReportPageController extends BaseController {
 
         Map<String, Integer> fileCounts = countFiles();
 
+        totalFilesLbl.setText(String.valueOf(fileCounts.values().stream().mapToInt(Integer::intValue).sum()));
+
         for (Map.Entry<String, Integer> entry : fileCounts.entrySet()) {
             dataSeries.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
         }
+
+
 
         fileBarChart.getData().add(dataSeries);
     }
