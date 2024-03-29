@@ -16,7 +16,6 @@ public class KeyHandler {
     /**
      * Creates a new key with the specified name.
      *
-     * @return The path to the newly created key file.
      * @throws IOException If an I/O error occurs.
      * @throws NoSuchAlgorithmException If the specified cryptographic algorithm is not available.
      */

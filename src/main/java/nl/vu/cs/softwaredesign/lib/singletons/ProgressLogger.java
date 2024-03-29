@@ -5,13 +5,11 @@ import nl.vu.cs.softwaredesign.lib.handlers.PathHandler;
 import nl.vu.cs.softwaredesign.lib.interfaces.IProgressListener;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
@@ -19,8 +17,9 @@ import java.util.List;
  * functionality to log progress updates to a logfile.
  */
 public class ProgressLogger implements IProgressListener {
-    private static ProgressLogger instance;
-    public File logFile;
+    private static final Logger logger = Logger.getLogger(ProgressLogger.class.getName());
+    private static ProgressLogger instance = new ProgressLogger();
+    private final File logFile;
 
     /**
      * Private constructor to prevent instantiation from outside the class.
@@ -30,8 +29,11 @@ public class ProgressLogger implements IProgressListener {
         logFile = new File(PathHandler.getUserDataPath() + "logfile.txt");
 
         try {
-            if (!logFile.exists()) {
-                logFile.createNewFile();
+            boolean fileCreated = logFile.createNewFile();
+            if (fileCreated) {
+                logger.info("File created successfully.");
+            } else {
+                logger.warning("File creation failed.");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

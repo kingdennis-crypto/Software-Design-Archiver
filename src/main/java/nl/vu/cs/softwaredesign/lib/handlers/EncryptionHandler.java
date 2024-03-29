@@ -65,7 +65,6 @@ public class EncryptionHandler {
 
     /**
      * Decrypts a file encrypted with AES/GCM/NoPadding algorithm and extracts the associated metadata.
-     *
      * The decrypted content will be written back to the input file
      * @param path The path to the file to be decrypted.
      * @param secret The secret key used for decryption.

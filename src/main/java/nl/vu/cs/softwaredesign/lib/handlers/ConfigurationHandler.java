@@ -30,15 +30,28 @@ public class ConfigurationHandler {
 
             // Check if the config file exists
             if (Files.exists(configFile)) {
-                // Load the existing properties
-                this.properties.load(new FileInputStream(String.valueOf(configFile)));
-
+                loadPropertiesFromFile(configFile);
             } else {
                 // Create a new config file
                 Files.createFile(configFile);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads properties from a specified file into the current instance.
+     *
+     * @param configFile The path to the configuration file from which properties are to be loaded.
+     */
+    private void loadPropertiesFromFile(Path configFile) {
+        try (FileInputStream fis = new FileInputStream(String.valueOf(configFile))) {
+            // Load the existing properties
+            this.properties.load(fis);
+        } catch (IOException e) {
+            // Handle exception
+            e.printStackTrace();
         }
     }
 
@@ -100,8 +113,8 @@ public class ConfigurationHandler {
      * Resets the current properties to the values stored in the configuration file.
      */
     public void resetSavedProperties() throws IOException {
-        try {
-            this.properties.load(new FileInputStream(PathHandler.getUserDataPath() + CONFIG_PROPERTIES_DIRECTORY));
+        try (FileInputStream fileInputStream = new FileInputStream(PathHandler.getUserDataPath() + CONFIG_PROPERTIES_DIRECTORY)) {
+            this.properties.load(fileInputStream);
         } catch (IOException ex) {
             err.println("Error resetting properties file: " + ex.getMessage());
             throw ex;

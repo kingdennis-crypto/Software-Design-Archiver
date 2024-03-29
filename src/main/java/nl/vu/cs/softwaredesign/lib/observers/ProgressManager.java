@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgressManager {
-    private static ProgressManager instance;
-    private List<IProgressListener> listeners;
+    private static ProgressManager instance = new ProgressManager();
+    private final List<IProgressListener> listeners;
 
     private ProgressManager() {
         this.listeners = new ArrayList<>();

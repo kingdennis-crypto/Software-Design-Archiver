@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import nl.vu.cs.softwaredesign.lib.annotations.CompressionType;
@@ -17,7 +16,6 @@ import nl.vu.cs.softwaredesign.lib.handlers.KeyHandler;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SettingsPageController extends BaseController {
@@ -27,7 +25,9 @@ public class SettingsPageController extends BaseController {
     private ComboBox<String> compressionFormatCombo;
 
     @FXML
-    private Text compressOutputTxt, decompressOutputTxt;
+    private Text compressOutputTxt;
+    @FXML
+    private Text decompressOutputTxt;
 
     private static final String EMPTY_COMPRESS_OUTPUT = "No default compress output selected!";
     private static final String EMPTY_DECOMPRESS_OUTPUT = "No default decompress output selected!";
@@ -148,7 +148,7 @@ public class SettingsPageController extends BaseController {
             try {
                 keyHandler.createAndSetMainKey();
             } catch (IOException | NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException("Error resetting encryption key", e);
             }
         };
 

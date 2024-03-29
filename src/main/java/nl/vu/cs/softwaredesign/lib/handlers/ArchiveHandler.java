@@ -7,8 +7,10 @@ import nl.vu.cs.softwaredesign.lib.models.FileArchive;
 import nl.vu.cs.softwaredesign.lib.models.KeyProperties;
 import nl.vu.cs.softwaredesign.lib.observers.ProgressManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.nio.file.Files;
 import java.util.Map;
 
 public class ArchiveHandler {
@@ -33,7 +35,7 @@ public class ArchiveHandler {
             String[] archivePath = destinationPath.split("/");
             String archiveName = archivePath[archivePath.length - 1];
 
-            destinationPath = ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_COMPRESS_OUTPUT) + "/" + archiveName;
+            destinationPath = ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_COMPRESS_OUTPUT) + File.separator + archiveName;
         }
 
         FileArchive archive = format.compress(fileArchive, destinationPath);
@@ -70,7 +72,7 @@ public class ArchiveHandler {
             String[] archivePath = destinationPath.split("/");
             String archiveName = archivePath[archivePath.length - 1];
 
-            destinationPath = ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_DECOMPRESS_OUTPUT) + "/" + archiveName;
+            destinationPath = ConfigurationHandler.getInstance().getProperty(SettingsValue.DEFAULT_DECOMPRESS_OUTPUT) + File.separator + archiveName;
         }
 
         progressManager.notifyListeners(Status.COMPILING, fileArchive.getROOT());
@@ -92,7 +94,11 @@ public class ArchiveHandler {
 
         FileArchive deArchived = format.decompress(fileArchive, destinationPath);
 
-        fileArchive.getROOT().delete();
+        try {
+            Files.delete(fileArchive.getROOT().toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         progressManager.notifyListeners(Status.FINISHED, deArchived.getROOT());
 
