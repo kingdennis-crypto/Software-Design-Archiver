@@ -37,6 +37,8 @@ dependencies {
 }
 
 jar {
+    duplicatesStrategy = 'exclude'
+
     manifest {
         attributes "Main-Class": "nl.vu.cs.softwaredesign.Main"
     }
