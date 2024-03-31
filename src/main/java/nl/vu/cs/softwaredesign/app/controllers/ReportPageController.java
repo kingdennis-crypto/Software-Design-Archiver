@@ -12,7 +12,6 @@ import nl.vu.cs.softwaredesign.lib.handlers.EncryptionHandler;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ReportPageController extends BaseController {
