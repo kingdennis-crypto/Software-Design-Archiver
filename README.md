@@ -85,13 +85,6 @@ If you haven't installed it yet, you can download and install JDK 11 from the of
 
 The project can be run by using the following command: `java -jar <fat jar>`
 
-## Collaborations
-
-- Dennis Moes - d.moes@student.vu.nl - 2839746
-- Simon Vriesema - s.r.vriesema@student.vu.nl - 2839785
-- Joli-Coeur Weibolt - j.r.f.weibolt@student.vu.nl - 2837627
-- Jaïr Telting - j.s.student@vu.nl - 2691376
-
 ## Acknowledgements
 
 - [Zip4j](https://github.com/srikanth-lingala/zip4j)
