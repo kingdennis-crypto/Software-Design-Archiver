@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.vu.cs.softwaredesign.app.controllers.HomePageController">
+   <center>
+      <VBox prefWidth="100.0" spacing="10.0" style="-fx-background-color: #FFFF;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefWidth="100.0" style="-fx-background-color: #FFFF;">
+               <children>
+                  <Label style="-fx-text-fill: #0077b3; -fx-font-family: Roboto;" text="Metadata">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font name="SansSerif Regular" size="12.0" />
+                     </font>
+                  </Label>
+                  <ListView fx:id="metadataListView" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black; -fx-background-color: white; -fx-border-radius: 5;" />
+                  <Button fx:id="addMetadataBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#openMetadataPage" style="-fx-background-color: #0077b3; -fx-text-fill: #FFFF;" text="Add metadata">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label style="-fx-text-fill: #0077b3;" text="Files">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <TreeView fx:id="treeViewTable" maxHeight="1.7976931348623157E308" prefHeight="251.0" prefWidth="281.0" style="-fx-border-color: black; -fx-border-radius: 5; -fx-background-color: white;" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </TreeView>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </VBox>
+            <Button fx:id="generateReportBtn" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#openReportPage" style="-fx-background-color: #0077b3; -fx-text-fill: #FFFF;" text="Generate report">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <CheckBox fx:id="includePwdCheckbox" mnemonicParsing="false" style="-fx-text-fill: #0077b3;" text="password" />
+                  <TextField fx:id="pwdInput" HBox.hgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </center>
+   <bottom>
+      <HBox maxWidth="1.7976931348623157E308" spacing="5.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="clearBtn" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" minWidth="90.0" mnemonicParsing="false" onMouseClicked="#clearSelectedFolder" prefWidth="90.0" style="-fx-background-color: #0077b3; -fx-text-fill: #FFFF;" text="Clear" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+          <Button fx:id="deArchiveBtn" maxWidth="1.7976931348623157E308" minWidth="90.0" mnemonicParsing="false" onMouseClicked="#deArchiveSelection" prefWidth="90.0" style="-fx-background-color: #0077b3; -fx-text-fill: #FFFF;" text="Dearchive" HBox.hgrow="ALWAYS">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="archiveBtn" maxWidth="1.7976931348623157E308" minWidth="90.0" mnemonicParsing="false" onMouseClicked="#archiveSelection" prefWidth="90.0" style="-fx-background-color: #0077b3; -fx-text-fill: #FFFF;" text="Archive" HBox.hgrow="ALWAYS">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="settingsMenuItem" mnemonicParsing="false" onAction="#openSettingsPage" text="Settings" />
+                  <MenuItem fx:id="logsMenuItem" mnemonicParsing="false" onAction="#openLogsPage" text="Logs" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Select">
+            <items>
+              <MenuItem fx:id="selectFolderMenuItem" mnemonicParsing="false" onAction="#chooseFolder" text="Folder" />
+                  <MenuItem fx:id="selectArchiveMenuItem" mnemonicParsing="false" onAction="#chooseArchive" text="Archive" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
